@@ -1,0 +1,77 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import HeroText from '~/components/widgets/HeroText.astro';
+import ContactUs from '~/components/widgets/Contact.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+
+const metadata = {
+  title: 'Contact',
+};
+---
+
+<Layout metadata={metadata}>
+  <!-- HeroText Widget ******************* -->
+
+  <HeroText tagline="Contact" title="Entrons en contact !" />
+
+  <ContactUs
+    id="form"
+    title="Écrivez-nous dès aujourd'hui !"
+    subtitle="Vous avez une question ? Vous souhaitez devenir sponsor ou simplement en savoir plus sur l’événement ? Laissez-nous un message."
+    inputs={[
+      {
+        type: 'text',
+        name: 'name',
+        label: 'Nom',
+      },
+      {
+        type: 'email',
+        name: 'email',
+        label: 'Email',
+      },
+    ]}
+    textarea={{
+      label: 'Message',
+    }}
+    disclaimer={{
+      label:
+        'En soumettant ce formulaire, vous acceptez la collecte de vos informations personnelles dans le cadre de votre demande.',
+    }}
+    description="Notre équipe vous répond généralement sous 24 heures (jours ouvrés)."
+  />
+
+  <!-- Features2 Widget ************** -->
+
+  <Features2
+    title="Coordonnées utiles"
+    items={[
+      {
+        title: 'Support général',
+        description: `Pour toute question sur l’événement, la participation, ou la logistique.`,
+      },
+      {
+        title: 'Sponsoring',
+        description: 'Pour plus d’infos sur les options de sponsoring ou pour proposer une idée partenaire.',
+      },
+      {
+        title: 'Communauté',
+        description: 'Rejoignez l’organisation ou proposez un atelier, une conférence ou un stand communautaire.',
+      },
+      {
+        title: 'Téléphone',
+        description: 'Non disponible – contactez-nous par email.',
+        icon: 'tabler:headset',
+      },
+      {
+        title: 'Email',
+        description: 'kcdprovence@gmail.com',
+        icon: 'tabler:mail',
+      },
+      {
+        title: 'Lieu de l’événement',
+        description: 'Aix-en-Provence (lieu exact communiqué prochainement)',
+        icon: 'tabler:map-pin',
+      },
+    ]}
+  />
+</Layout>

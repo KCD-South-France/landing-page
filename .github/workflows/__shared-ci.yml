@@ -1,0 +1,21 @@
+name: Common Continuous Integration tasks
+
+on:
+  workflow_call:
+
+permissions:
+  contents: read
+  security-events: write
+  # FIXME: This is a workaround for having workflow ref. See https://github.com/orgs/community/discussions/38659
+  id-token: write
+
+jobs:
+  continuous-integration:
+    uses: hoverkraft-tech/ci-github-nodejs/.github/workflows/continuous-integration.yml@5c1010a9146952f724730bf79ba8e2e40ba8e474 # 0.11.0
+    with:
+      working-directory: application
+      test: false
+      build: |
+        {
+          "artifact": ["application/dist"]
+        }
