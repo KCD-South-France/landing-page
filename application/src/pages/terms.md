@@ -9,8 +9,8 @@ Merci de lire attentivement ces conditions avant d’utiliser notre site.
 
 ## Définitions
 
-- **Entreprise** : désigne KCD Provence (ou « nous »).
-- **Service** : désigne le site web de KCD Provence.
+- **Entreprise** : désigne Cloud Native Provence (ou « nous »).
+- **Service** : désigne le site web de Cloud Native Provence.
 - **Utilisateur** : toute personne physique ou morale accédant au Service.
 - **Appareil** : tout outil permettant d’accéder au Service (ordinateur, tablette, téléphone…).
 
