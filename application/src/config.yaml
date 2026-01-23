@@ -1,5 +1,5 @@
 site:
-  name: KCD Provence
+  name: Cloud Native Provence
   site: 'https://kcd-south-france.github.io'
   base: '/landing-page/'
   trailingSlash: false
@@ -8,14 +8,14 @@ site:
 
 metadata:
   title:
-    default: KCD Provence
-    template: '%s — KCD Provence'
-  description: 'La journée Cloud Native & Kubernetes à Aix-en-Provence, organisée par la communauté et soutenue par la CNCF.'
+    default: Cloud Native Provence
+    template: '%s — Cloud Native Provence'
+  description: 'La journée Cloud Native & Kubernetes à Aix-en-Provence, organisée par la communauté.'
   robots:
     index: true
     follow: true
   openGraph:
-    site_name: KCD Provence
+    site_name: Cloud Native Provence
     images:
       - url: '~/assets/images/hero-image.png'
         width: 1200
@@ -32,34 +32,34 @@ i18n:
 
 apps:
   blog:
-    isEnabled: true
+    isEnabled: false
     postsPerPage: 6
 
     post:
-      isEnabled: true
+      isEnabled: false
       permalink: '/%slug%' # Variables: %slug%, %year%, %month%, %day%, %hour%, %minute%, %second%, %category%
       robots:
         index: true
 
     list:
-      isEnabled: true
+      isEnabled: false
       pathname: 'blog' # Blog main path, you can change this to "articles" (/articles)
       robots:
         index: true
 
     category:
-      isEnabled: true
+      isEnabled: false
       pathname: 'category' # Category main path /category/some-category, you can change this to "group" (/group/some-category)
       robots:
         index: true
 
     tag:
-      isEnabled: true
+      isEnabled: false
       pathname: 'tag' # Tag main path /tag/some-tag, you can change this to "topics" (/topics/some-category)
       robots:
         index: false
 
-    isRelatedPostsEnabled: true
+    isRelatedPostsEnabled: false
     relatedPostsCount: 4
 
 analytics:

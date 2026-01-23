@@ -1,4 +1,4 @@
-# KCD Provence - Landing page
+# Cloud Native Provence - Landing page
 
 ### Project structure
 

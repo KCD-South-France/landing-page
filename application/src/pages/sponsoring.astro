@@ -8,14 +8,14 @@ import CallToAction from '~/components/widgets/CallToAction.astro';
 import { getPermalink } from '~/utils/permalinks';
 
 const metadata = {
-  title: 'Sponsoring — KCD Provence',
+  title: 'Sponsoring — Cloud Native Provence',
 };
 ---
 
 <Layout metadata={metadata}>
   <HeroText
     tagline="Sponsoring"
-    title="Soutenez KCD Provence 2026"
+    title="Soutenez Cloud Native Provence 2026"
     subtitle="Rejoignez-nous pour faire de cette journée un succès collectif et communautaire."
   />
 
@@ -101,7 +101,7 @@ const metadata = {
   />
 
   <Features3
-    title="Pourquoi sponsoriser KCD Provence ?"
+    title="Pourquoi sponsoriser Cloud Native Provence ?"
     subtitle="Un partenariat avec fort impact pour les entreprises tech"
     columns={2}
     items={[
@@ -152,8 +152,41 @@ const metadata = {
     ]}
   />
 
+  <Features3
+    title="Matériel de sponsoring"
+    subtitle="Les dossiers de sponsoring seront bientôt disponibles en téléchargement"
+    columns={2}
+    items={[
+      {
+        title: 'Dossier de sponsoring (FR)',
+        description:
+          'Le dossier complet en français avec toutes les informations sur les différentes formules sera disponible prochainement.',
+        icon: 'tabler:file-text',
+      },
+      {
+        title: 'Sponsorship Package (EN)',
+        description:
+          'The complete sponsorship package in English with all the information about the different options will be available soon.',
+        icon: 'tabler:file-text',
+      },
+    ]}
+  />
+
+  <Features3
+    title="Contact Sponsoring"
+    subtitle="Pour toute question sur le sponsoring, contactez-nous"
+    columns={1}
+    items={[
+      {
+        title: 'Email',
+        description: 'sponsors@cloudnative-provence.fr',
+        icon: 'tabler:mail',
+      },
+    ]}
+  />
+
   <CallToAction
-    title="Prêt à rejoindre l’aventure KCD Provence ?"
+    title="Prêt à rejoindre l’aventure Cloud Native Provence ?"
     subtitle="Contactez-nous pour sponsoriser l’événement ou en savoir plus."
     actions={[
       {
