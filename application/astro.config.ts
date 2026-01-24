@@ -23,7 +23,7 @@ const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroInteg
 
 export default defineConfig({
   site: 'https://kcd-south-france.github.io',
-  base: 'landing-page',
+  base: import.meta.env.DEV ? '/' : 'landing-page',
   output: 'static',
   i18n: {
     locales: ['fr', 'en'],
