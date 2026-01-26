@@ -23,7 +23,7 @@ const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroInteg
 
 export default defineConfig({
   site: 'https://cloudnative-provence.fr',
-  base: import.meta.env.DEV ? '/' : '',
+  base: '/',
   output: 'static',
   i18n: {
     locales: ['fr', 'en'],
