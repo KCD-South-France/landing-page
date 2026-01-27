@@ -22,8 +22,8 @@ const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroInteg
   hasExternalScripts ? (Array.isArray(items) ? items.map((item) => item()) : [items()]) : [];
 
 export default defineConfig({
-  site: 'https://kcd-south-france.github.io',
-  base: import.meta.env.DEV ? '/' : 'landing-page',
+  site: 'https://cloudnative-provence.fr',
+  base: '/',
   output: 'static',
   i18n: {
     locales: ['fr', 'en'],
