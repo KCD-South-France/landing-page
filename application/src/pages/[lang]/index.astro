@@ -1,0 +1,29 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import { languages } from '~/i18n/ui';
+import type { AppLang } from '~/i18n/routes';
+import homeEn from '~/data/pages/home/en';
+import homeFr from '~/data/pages/home/fr';
+import Content from '~/pages/home/_content.astro';
+
+export function getStaticPaths() {
+  return (Object.keys(languages) as AppLang[]).map((lang) => ({
+    params: { lang },
+  }));
+}
+
+const lang = Astro.params.lang as AppLang;
+const t = lang === 'en' ? homeEn : homeFr;
+---
+
+<Layout metadata={t.metadata}>
+  <Content
+    hero={t.hero}
+    note={t.note}
+    features={t.features}
+    contentSection={t.content}
+    steps={t.steps}
+    stats={t.stats}
+    callToAction={t.callToAction}
+  />
+</Layout>

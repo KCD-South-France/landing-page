@@ -1,0 +1,57 @@
+---
+interface Link {
+  prefix: string;
+  label: string;
+  href: string;
+  suffix?: string;
+}
+
+interface Section {
+  title: string;
+  paragraphs?: readonly string[];
+  items?: readonly string[];
+  link?: Link;
+}
+
+interface Props {
+  lastUpdatedLabel: string;
+  lastUpdated: string;
+  intro: string;
+  sections: readonly Section[];
+}
+
+const { lastUpdatedLabel, lastUpdated, intro, sections } = Astro.props;
+---
+
+<div class="max-w-4xl mx-auto px-4 md:px-6 py-10">
+  <p><em>{lastUpdatedLabel}: {lastUpdated}</em></p>
+  <p>{intro}</p>
+
+  {
+    sections.map((section) => (
+      <section>
+        <h2>{section.title}</h2>
+
+        {section.paragraphs?.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+
+        {section.link && (
+          <p>
+            {section.link.prefix}
+            <a href={section.link.href}>{section.link.label}</a>
+            {section.link.suffix}
+          </p>
+        )}
+
+        {section.items && (
+          <ul>
+            {section.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        )}
+      </section>
+    ))
+  }
+</div>

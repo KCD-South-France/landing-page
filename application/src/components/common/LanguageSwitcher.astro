@@ -1,0 +1,29 @@
+---
+import { languages } from '~/i18n/ui';
+import { getLangFromUrl } from '~/i18n/utils';
+import { translatePathToLang } from '~/i18n/routes';
+
+const lang = getLangFromUrl(Astro.url);
+const currentPath = Astro.url.pathname;
+---
+
+<div class="relative inline-block text-left">
+  <div class="flex items-center space-x-2">
+    {
+      Object.entries(languages).map(([langCode]) => (
+        <a
+          href={translatePathToLang(currentPath, langCode as keyof typeof languages)}
+          class:list={[
+            'px-3 py-2 text-sm font-medium rounded-md transition-colors',
+            lang === langCode
+              ? 'bg-primary text-white'
+              : 'text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800',
+          ]}
+          aria-current={lang === langCode ? 'page' : undefined}
+        >
+          {langCode.toUpperCase()}
+        </a>
+      ))
+    }
+  </div>
+</div>

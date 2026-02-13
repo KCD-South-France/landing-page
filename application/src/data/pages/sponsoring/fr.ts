@@ -1,31 +1,21 @@
----
-import Layout from '~/layouts/PageLayout.astro';
-import HeroText from '~/components/widgets/HeroText.astro';
-import Prices from '~/components/widgets/Pricing.astro';
-import FAQs from '~/components/widgets/FAQs.astro';
-import Features3 from '~/components/widgets/Features3.astro';
-import CallToAction from '~/components/widgets/CallToAction.astro';
-import { getPermalink } from '~/utils/permalinks';
+import { getLocalizedPagePath } from '~/i18n/routes';
 
-const metadata = {
-  title: 'Sponsoring — Cloud Native Provence',
-};
----
-
-<Layout metadata={metadata}>
-  <HeroText
-    tagline="Sponsoring"
-    title="Soutenez Cloud Native Provence 2026"
-    subtitle="Rejoignez-nous pour faire de cette journée un succès collectif et communautaire."
-  />
-
-  <Prices
-    title="Nos formules de sponsoring"
-    subtitle="Choisissez le pack qui correspond à vos objectifs"
-    prices={[
+export default {
+  metadata: {
+    title: 'Sponsoring — Cloud Native Provence',
+  },
+  hero: {
+    tagline: 'Sponsoring',
+    title: 'Soutenez Cloud Native Provence 2026',
+    subtitle: 'Rejoignez-nous pour faire de cette journée un succès collectif et communautaire.',
+  },
+  pricing: {
+    title: 'Nos formules de sponsoring',
+    subtitle: 'Choisissez le pack qui correspond à vos objectifs',
+    packages: [
       {
         title: 'Platinum',
-        subtitle: 'Visibilité maximale sur tout l’événement',
+        subtitle: "Visibilité maximale sur tout l'événement",
         price: 15000,
         period: 'HT',
         items: [
@@ -39,7 +29,7 @@ const metadata = {
         ],
         callToAction: {
           text: 'Devenir sponsor',
-          href: getPermalink('/contact'),
+          href: getLocalizedPagePath('fr', 'contact'),
         },
         hasRibbon: true,
         ribbonTitle: 'Premium',
@@ -59,7 +49,7 @@ const metadata = {
         ],
         callToAction: {
           text: 'Devenir sponsor',
-          href: getPermalink('/contact'),
+          href: getLocalizedPagePath('fr', 'contact'),
         },
       },
       {
@@ -77,7 +67,7 @@ const metadata = {
         ],
         callToAction: {
           text: 'Devenir sponsor',
-          href: getPermalink('/contact'),
+          href: getLocalizedPagePath('fr', 'contact'),
         },
       },
       {
@@ -94,69 +84,63 @@ const metadata = {
         ],
         callToAction: {
           text: 'Devenir sponsor',
-          href: getPermalink('/contact'),
+          href: getLocalizedPagePath('fr', 'contact'),
         },
       },
-    ]}
-  />
-
-  <Features3
-    title="Pourquoi sponsoriser Cloud Native Provence ?"
-    subtitle="Un partenariat avec fort impact pour les entreprises tech"
-    columns={2}
-    items={[
+    ],
+  },
+  features: {
+    title: 'Pourquoi sponsoriser Cloud Native Provence ?',
+    subtitle: 'Un partenariat avec fort impact pour les entreprises tech',
+    items: [
       {
         title: 'Visibilité ciblée',
-        description: 'Mettez en avant votre marque auprès d’un public technique passionné et engagé.',
+        description: "Mettez en avant votre marque auprès d'un public technique passionné et engagé.",
         icon: 'tabler:eye',
       },
       {
         title: 'Recrutement',
-        description: 'Attirez des talents qualifiés, à l’écoute du marché et motivés.',
+        description: "Attirez des talents qualifiés, à l'écoute du marché et motivés.",
         icon: 'tabler:user-plus',
       },
       {
         title: 'Positionnement',
-        description: 'Affichez votre engagement dans l’écosystème Cloud Native et Open Source.',
+        description: "Affichez votre engagement dans l'écosystème Cloud Native et Open Source.",
         icon: 'tabler:rocket',
       },
       {
         title: 'Networking',
-        description: 'Participez au dîner exclusif Sponsors & Partenaires avec l’équipe organisatrice et les speakers.',
+        description: "Participez au dîner exclusif Sponsors & Partenaires avec l'équipe organisatrice et les speakers.",
         icon: 'tabler:heart-handshake',
       },
-    ]}
-  />
-
-  <FAQs
-    title="Questions fréquentes"
-    subtitle="Vous hésitez encore ? Voici quelques réponses pour vous aider."
-    columns={1}
-    items={[
+    ],
+  },
+  faqs: {
+    title: 'Questions fréquentes',
+    subtitle: 'Vous hésitez encore ? Voici quelques réponses pour vous aider.',
+    items: [
       {
         title: 'Puis-je proposer une autre idée de sponsoring ?',
         description: 'Oui, contactez-nous pour discuter de toute idée créative ou besoin spécifique.',
       },
       {
-        title: 'Puis-je être sponsor communautaire en tant qu’association ?',
-        description: 'Absolument, tant que votre action est alignée avec l’écosystème Open Source et Cloud Native.',
+        title: "Puis-je être sponsor communautaire en tant qu'association ?",
+        description: "Absolument, tant que votre action est alignée avec l'écosystème Open Source et Cloud Native.",
       },
       {
         title: 'Est-ce que je peux cumuler plusieurs options ?',
-        description: 'Oui, vous pouvez ajouter des options (badge, café, glaces…) à n’importe quel pack.',
+        description: "Oui, vous pouvez ajouter des options (badge, café, glaces…) à n'importe quel pack.",
       },
       {
         title: 'Est-ce que la facture est assujettie à la TVA ?',
         description: 'Oui, les prix sont affichés HT. La TVA est applicable selon la législation en vigueur.',
       },
-    ]}
-  />
-
-  <Features3
-    title="Matériel de sponsoring"
-    subtitle="Les dossiers de sponsoring seront bientôt disponibles en téléchargement"
-    columns={2}
-    items={[
+    ],
+  },
+  materials: {
+    title: 'Matériel de sponsoring',
+    subtitle: 'Les dossiers de sponsoring seront bientôt disponibles en téléchargement',
+    items: [
       {
         title: 'Dossier de sponsoring (FR)',
         description:
@@ -169,31 +153,28 @@ const metadata = {
           'The complete sponsorship package in English with all the information about the different options will be available soon.',
         icon: 'tabler:file-text',
       },
-    ]}
-  />
-
-  <Features3
-    title="Contact Sponsoring"
-    subtitle="Pour toute question sur le sponsoring, contactez-nous"
-    columns={1}
-    items={[
+    ],
+  },
+  contact: {
+    title: 'Contact Sponsoring',
+    subtitle: 'Pour toute question sur le sponsoring, contactez-nous',
+    items: [
       {
         title: 'Email',
         description: 'sponsors@cloudnative-provence.fr',
         icon: 'tabler:mail',
       },
-    ]}
-  />
-
-  <CallToAction
-    title="Prêt à rejoindre l’aventure Cloud Native Provence ?"
-    subtitle="Contactez-nous pour sponsoriser l’événement ou en savoir plus."
-    actions={[
+    ],
+  },
+  callToAction: {
+    title: "Prêt à rejoindre l'aventure Cloud Native Provence ?",
+    subtitle: "Contactez-nous pour sponsoriser l'événement ou en savoir plus.",
+    actions: [
       {
         variant: 'primary',
         text: 'Nous contacter',
-        href: getPermalink('/contact'),
+        href: getLocalizedPagePath('fr', 'contact'),
       },
-    ]}
-  />
-</Layout>
+    ],
+  },
+} as const;

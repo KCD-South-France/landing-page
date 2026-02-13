@@ -1,0 +1,27 @@
+---
+import { languages, defaultLang } from '~/i18n/ui';
+
+const currentPath = Astro.url.pathname;
+
+// Extract the current language from the path
+const pathParts = currentPath.split('/').filter(Boolean);
+
+// Get the path without language prefix
+const pathWithoutLang = pathParts[0] in languages ? '/' + pathParts.slice(1).join('/') : currentPath;
+
+// Ensure path ends consistently
+const normalizedPath = pathWithoutLang === '/' ? '/' : pathWithoutLang.replace(/\/$/, '');
+
+if (!Astro.site) {
+  throw new Error('Astro.site is required for generating language alternates');
+}
+
+const baseUrl = Astro.site.origin;
+---
+
+{
+  Object.keys(languages).map((lang) => (
+    <link rel="alternate" hreflang={lang} href={`${baseUrl}/${lang}${normalizedPath}`} />
+  ))
+}
+<link rel="alternate" hreflang="x-default" href={`${baseUrl}/${defaultLang}${normalizedPath}`} />

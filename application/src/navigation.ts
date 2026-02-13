@@ -1,54 +1,61 @@
 import { getPermalink } from './utils/permalinks';
+import { useTranslations } from './i18n/utils';
+import { getLocalizedPagePath } from './i18n/routes';
+import type { ui } from './i18n/ui';
 import favIcon from '~/assets/favicons/favicon.svg';
 
-export const headerData = {
-  links: [
-    {
-      text: 'Sponsoring',
-      href: getPermalink('/sponsoring'),
-    },
-    {
-      text: 'À propos',
-      href: getPermalink('/about'),
-    },
-    {
-      text: 'Contact',
-      href: getPermalink('/contact'),
-    },
-  ],
+// Function to get locale-aware navigation
+export const getHeaderData = (locale: keyof typeof ui) => {
+  const t = useTranslations(locale);
+
+  return {
+    links: [
+      {
+        text: t('nav.sponsoring'),
+        href: getPermalink(getLocalizedPagePath(locale, 'sponsoring')),
+      },
+      {
+        text: t('nav.about'),
+        href: getPermalink(getLocalizedPagePath(locale, 'about')),
+      },
+      {
+        text: t('nav.contact'),
+        href: getPermalink(getLocalizedPagePath(locale, 'contact')),
+      },
+    ],
+  };
 };
 
-export const footerData = {
-  links: [
-    {
-      title: 'Événement',
-      links: [
-        { text: 'Sponsoring', href: getPermalink('/sponsoring') },
-        { text: 'Programme', href: '#' }, // à compléter avec l’URL réelle
-        { text: 'Infos pratiques', href: '#' }, // à compléter aussi
-      ],
-    },
-    {
-      title: 'Organisation',
-      links: [
-        { text: 'À propos', href: getPermalink('/about') },
-        { text: 'Charte Graphique', href: getPermalink('/brand-guidelines') },
-        { text: 'Contact', href: getPermalink('/contact') },
-      ],
-    },
-  ],
-  secondaryLinks: [
-    { text: 'Mentions légales', href: getPermalink('/terms') },
-    { text: 'Politique de confidentialité', href: getPermalink('/privacy') },
-  ],
-  socialLinks: [
-    // { ariaLabel: 'X', icon: 'tabler:brand-x', href: '#' },
-    // { ariaLabel: 'Instagram', icon: 'tabler:brand-instagram', href: '#' },
-    // { ariaLabel: 'Facebook', icon: 'tabler:brand-facebook', href: '#' },
-    // { ariaLabel: 'RSS', icon: 'tabler:rss', href: getAsset(''/rss.xml') }, // Note: restore getAsset import when uncommenting
-  ],
-  footNote: `
-    <img class="w-5 h-5 md:w-6 md:h-6 md:-mt-0.5 bg-cover mr-1.5 rtl:mr-0 rtl:ml-1.5 float-left rtl:float-right rounded-sm" src="${favIcon.src}" alt="Logo Cloud Native Provence" loading="lazy" />
-    Conçu par la <a class="text-blue-600 underline dark:text-muted" href="https://cloudnative-provence.fr/">communauté Cloud Native Provence</a> · Tous droits réservés.
-  `,
+export const getFooterData = (locale: keyof typeof ui) => {
+  const t = useTranslations(locale);
+
+  return {
+    links: [
+      {
+        title: t('footer.event'),
+        links: [
+          { text: t('footer.sponsoring'), href: getPermalink(getLocalizedPagePath(locale, 'sponsoring')) },
+          { text: t('footer.program'), href: '#' },
+          { text: t('footer.practicalInfo'), href: '#' },
+        ],
+      },
+      {
+        title: t('footer.organization'),
+        links: [
+          { text: t('footer.about'), href: getPermalink(getLocalizedPagePath(locale, 'about')) },
+          { text: t('footer.brandGuidelines'), href: getPermalink(getLocalizedPagePath(locale, 'brand-guidelines')) },
+          { text: t('footer.contact'), href: getPermalink(getLocalizedPagePath(locale, 'contact')) },
+        ],
+      },
+    ],
+    secondaryLinks: [
+      { text: t('footer.terms'), href: getPermalink(getLocalizedPagePath(locale, 'terms')) },
+      { text: t('footer.privacy'), href: getPermalink(getLocalizedPagePath(locale, 'privacy')) },
+    ],
+    socialLinks: [],
+    footNote: `
+      <img class="w-5 h-5 md:w-6 md:h-6 md:-mt-0.5 bg-cover mr-1.5 rtl:mr-0 rtl:ml-1.5 float-left rtl:float-right rounded-sm" src="${favIcon.src}" alt="${t('footer.logoAlt')}" loading="lazy" />
+      ${t('footer.note')}
+    `,
+  };
 };

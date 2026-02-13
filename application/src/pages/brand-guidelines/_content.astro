@@ -1,0 +1,169 @@
+---
+import Layout from '~/layouts/PageLayout.astro';
+import HeroText from '~/components/widgets/HeroText.astro';
+import Features3 from '~/components/widgets/Features3.astro';
+import ContentWidget from '~/components/widgets/Content.astro';
+import type { Item, MetaData } from '~/types';
+
+interface PaletteColor {
+  name: string;
+  hex: string;
+  rgb: string;
+  usage: string;
+}
+
+interface TypographyExample {
+  label: string;
+  text: string;
+  style: string;
+}
+
+interface Props {
+  metadata?: MetaData;
+  hero: {
+    tagline?: string;
+    title?: string;
+    subtitle?: string;
+  };
+  colorPalette: {
+    title?: string;
+    subtitle?: string;
+    colors: readonly PaletteColor[];
+  };
+  typography: {
+    title?: string;
+    subtitle?: string;
+    fontName?: string;
+    description?: string;
+    examples: readonly TypographyExample[];
+  };
+  logoDownloads: {
+    title?: string;
+    subtitle?: string;
+    items: readonly Item[];
+  };
+  usageGuidelines: {
+    tagline?: string;
+    title?: string;
+    items: readonly Item[];
+    contentTitle?: string;
+    contentDescription?: string;
+  };
+  note: {
+    title?: string;
+    content?: string;
+    contactText?: string;
+    email?: string;
+  };
+}
+
+const { metadata, hero, colorPalette, typography, logoDownloads, usageGuidelines, note } = Astro.props;
+---
+
+<Layout metadata={metadata}>
+  <HeroText tagline={hero.tagline} title={hero.title} subtitle={hero.subtitle} />
+
+  <!-- Color Palette Section -->
+  <section class="px-4 py-16 sm:px-6 mx-auto lg:px-8 lg:py-20 max-w-6xl">
+    <div class="mb-8">
+      <h2 class="text-3xl md:text-4xl font-bold leading-tighter tracking-tighter mb-4 font-heading">
+        {colorPalette.title}
+      </h2>
+      <p class="text-xl text-muted">{colorPalette.subtitle}</p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      {
+        [...colorPalette.colors].map((color) => (
+          <div class="rounded-lg overflow-hidden shadow-lg">
+            <div class="h-32" style={`background-color: ${color.hex};`} />
+            <div class="p-4 bg-white dark:bg-slate-800">
+              <h3 class="font-bold text-lg mb-2">{color.name}</h3>
+              <p class="text-sm text-muted mb-1">HEX: {color.hex}</p>
+              <p class="text-sm text-muted mb-1">RGB: {color.rgb}</p>
+              <p class="text-sm text-muted">Usage: {color.usage}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Typography Section -->
+  <section class="px-4 py-16 sm:px-6 mx-auto lg:px-8 lg:py-20 max-w-6xl bg-blue-50 dark:bg-slate-800">
+    <div class="mb-8">
+      <h2 class="text-3xl md:text-4xl font-bold leading-tighter tracking-tighter mb-4 font-heading">
+        {typography.title}
+      </h2>
+      <p class="text-xl text-muted">{typography.subtitle}</p>
+    </div>
+
+    <div class="bg-white dark:bg-slate-900 rounded-lg p-8 shadow-lg">
+      <h3 class="text-2xl font-bold mb-4" style="font-family: Montserrat, sans-serif;">{typography.fontName}</h3>
+      <p class="text-lg mb-6">{typography.description}</p>
+
+      <div class="space-y-4">
+        {
+          [...typography.examples].map((example) => (
+            <div>
+              <p class="text-sm text-muted mb-2">{example.label}</p>
+              {example.style === 'text-4xl font-bold' && (
+                <h1 class={example.style} style="font-family: Montserrat, sans-serif;">
+                  {example.text}
+                </h1>
+              )}
+              {example.style === 'text-2xl font-semibold' && (
+                <h2 class={example.style} style="font-family: Montserrat, sans-serif;">
+                  {example.text}
+                </h2>
+              )}
+              {example.style === 'text-lg' && (
+                <p class={example.style} style="font-family: Montserrat, sans-serif;">
+                  {example.text}
+                </p>
+              )}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Logo Downloads Section -->
+  <Features3
+    title={logoDownloads.title}
+    subtitle={logoDownloads.subtitle}
+    columns={3}
+    items={[...logoDownloads.items]}
+  />
+
+  <!-- Usage Guidelines -->
+  <ContentWidget tagline={usageGuidelines.tagline} title={usageGuidelines.title} items={[...usageGuidelines.items]}>
+    <Fragment slot="content">
+      <h3 class="text-2xl font-bold tracking-tight dark:text-white sm:text-3xl mb-2">
+        {usageGuidelines.contentTitle}
+      </h3>
+      <p>
+        {usageGuidelines.contentDescription}
+      </p>
+    </Fragment>
+
+    <Fragment slot="bg">
+      <div class="absolute inset-0 bg-blue-50 dark:bg-transparent"></div>
+    </Fragment>
+  </ContentWidget>
+
+  <!-- Note Section -->
+  <section class="px-4 py-16 sm:px-6 mx-auto lg:px-8 lg:py-20 max-w-4xl">
+    <div class="bg-primary/10 border-l-4 border-primary p-6 rounded-r-lg">
+      <h3 class="text-xl font-bold mb-2">{note.title}</h3>
+      <p class="text-muted">
+        {note.content}
+      </p>
+      <p class="text-muted mt-4">
+        {note.contactText}
+        <a href={`mailto:${note.email}`} class="text-primary hover:underline">{note.email}</a>
+      </p>
+    </div>
+  </section>
+</Layout>

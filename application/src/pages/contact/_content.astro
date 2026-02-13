@@ -1,0 +1,18 @@
+---
+import HeroText from '~/components/widgets/HeroText.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import type { Item } from '~/types';
+
+export interface Props {
+  tagline: string;
+  title: string;
+  featuresTitle: string;
+  items: readonly Item[];
+}
+
+const { tagline, title, featuresTitle, items } = Astro.props;
+---
+
+<HeroText tagline={tagline} title={title} />
+
+<Features2 title={featuresTitle} items={[...items]} />

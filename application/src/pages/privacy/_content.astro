@@ -1,0 +1,57 @@
+---
+interface Subsection {
+  title: string;
+  paragraphs?: readonly string[];
+}
+
+interface Section {
+  title: string;
+  paragraphs?: readonly string[];
+  items?: readonly string[];
+  subsections?: readonly Subsection[];
+}
+
+interface Props {
+  lastUpdatedLabel: string;
+  lastUpdated: string;
+  intro: readonly string[];
+  sections: readonly Section[];
+}
+
+const { lastUpdatedLabel, lastUpdated, intro, sections } = Astro.props;
+---
+
+<div class="max-w-4xl mx-auto px-4 md:px-6 py-10">
+  <p><em>{lastUpdatedLabel}: {lastUpdated}</em></p>
+
+  {intro.map((paragraph) => <p>{paragraph}</p>)}
+
+  {
+    sections.map((section) => (
+      <section>
+        <h2>{section.title}</h2>
+
+        {section.paragraphs?.map((paragraph) => (
+          <p>{paragraph}</p>
+        ))}
+
+        {section.items && (
+          <ul>
+            {section.items.map((item) => (
+              <li>{item}</li>
+            ))}
+          </ul>
+        )}
+
+        {section.subsections?.map((subsection) => (
+          <>
+            <h3>{subsection.title}</h3>
+            {subsection.paragraphs?.map((paragraph) => (
+              <p>{paragraph}</p>
+            ))}
+          </>
+        ))}
+      </section>
+    ))
+  }
+</div>

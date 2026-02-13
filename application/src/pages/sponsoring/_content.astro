@@ -1,0 +1,84 @@
+---
+import HeroText from '~/components/widgets/HeroText.astro';
+import Prices from '~/components/widgets/Pricing.astro';
+import Features3 from '~/components/widgets/Features3.astro';
+import FAQs from '~/components/widgets/FAQs.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import { getPermalink } from '~/utils/permalinks';
+import type { Item } from '~/types';
+
+type ActionItem = {
+  href: string;
+} & Record<string, unknown>;
+
+type PricingPackage = {
+  callToAction: ActionItem;
+} & Record<string, unknown>;
+
+export interface Props {
+  hero: {
+    tagline?: string;
+    title?: string;
+    subtitle?: string;
+  };
+  pricing: {
+    title?: string;
+    subtitle?: string;
+    packages: readonly PricingPackage[];
+  };
+  features: {
+    title?: string;
+    subtitle?: string;
+    items?: readonly Item[];
+  };
+  faqs: {
+    title?: string;
+    subtitle?: string;
+    items?: readonly Item[];
+  };
+  materials: {
+    title?: string;
+    subtitle?: string;
+    items?: readonly Item[];
+  };
+  contact: {
+    title?: string;
+    subtitle?: string;
+    items?: readonly Item[];
+  };
+  callToAction: {
+    title?: string;
+    subtitle?: string;
+    actions: readonly ActionItem[];
+  };
+}
+
+const { hero, pricing, features, faqs, materials, contact, callToAction } = Astro.props;
+
+const pricesWithPermalinks = pricing.packages.map((pkg: PricingPackage) => ({
+  ...pkg,
+  callToAction: {
+    ...pkg.callToAction,
+    href: getPermalink(pkg.callToAction.href),
+  },
+}));
+
+const actionsWithPermalinks = callToAction.actions.map((action: ActionItem) => ({
+  ...action,
+  href: getPermalink(action.href),
+}));
+---
+
+<HeroText tagline={hero.tagline} title={hero.title} subtitle={hero.subtitle} />
+
+<Prices title={pricing.title} subtitle={pricing.subtitle} prices={pricesWithPermalinks} />
+
+<Features3 title={features.title} subtitle={features.subtitle} columns={2} items={[...(features.items ?? [])]} />
+
+<FAQs title={faqs.title} subtitle={faqs.subtitle} columns={1} items={[...(faqs.items ?? [])]} />
+
+<Features3 title={materials.title} subtitle={materials.subtitle} columns={2} items={[...(materials.items ?? [])]} />
+
+<Features3 title={contact.title} subtitle={contact.subtitle} columns={1} items={[...(contact.items ?? [])]} />
+
+<CallToAction title={callToAction.title} subtitle={callToAction.subtitle} actions={actionsWithPermalinks} />
