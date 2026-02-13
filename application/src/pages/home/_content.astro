@@ -1,0 +1,105 @@
+---
+import Hero from '~/components/widgets/Hero.astro';
+import Note from '~/components/widgets/Note.astro';
+import Features from '~/components/widgets/Features.astro';
+import Steps from '~/components/widgets/Steps.astro';
+import ContentWidget from '~/components/widgets/Content.astro';
+import Stats from '~/components/widgets/Stats.astro';
+import CallToAction from '~/components/widgets/CallToAction.astro';
+import CountDown from '~/components/widgets/CountDown.astro';
+import { getPermalink } from '~/utils/permalinks';
+import type { Image, Item, Stat } from '~/types';
+
+type ActionItem = {
+  href: string;
+} & Record<string, unknown>;
+
+export interface Props {
+  hero: {
+    actions: readonly ActionItem[];
+    image?: unknown;
+    title?: string | { main?: string; date?: string; location?: string };
+    subtitle?: string;
+    eventDate?: string;
+  };
+  note: {
+    title?: string;
+    description?: string;
+  };
+  features: {
+    id?: string;
+    tagline?: string;
+    title?: string;
+    subtitle?: string;
+    items?: readonly Item[];
+  };
+  contentSection: {
+    tagline?: string;
+    title?: string;
+    items?: readonly Item[];
+    image?: unknown;
+  };
+  steps: {
+    title?: string;
+    items?: readonly Item[];
+    image?: string | Image;
+  };
+  stats: {
+    items?: readonly Stat[];
+    stats?: readonly Stat[];
+  };
+  callToAction: {
+    title?: string;
+    subtitle?: string;
+    actions: readonly ActionItem[];
+  };
+}
+
+const { hero, note, features, contentSection, steps, stats, callToAction } = Astro.props;
+
+const heroActionsWithPermalinks = hero.actions.map((action: ActionItem) => ({
+  ...action,
+  href: getPermalink(action.href),
+}));
+
+const callToActionActionsWithPermalinks = callToAction.actions.map((action: ActionItem) => ({
+  ...action,
+  href: getPermalink(action.href),
+}));
+
+const statsItems = stats?.items ?? stats?.stats ?? [];
+
+const heroTitleHtml =
+  typeof hero?.title === 'string'
+    ? hero.title
+    : [hero?.title?.main, hero?.title?.date, hero?.title?.location].filter(Boolean).join(' ');
+---
+
+<Hero actions={heroActionsWithPermalinks} image={hero.image}>
+  <Fragment slot="title" set:html={heroTitleHtml} />
+  <Fragment slot="subtitle" set:text={hero.subtitle} />
+  {hero.eventDate && <CountDown slot="title" eventDate={hero.eventDate} />}
+</Hero>
+
+<Note title={note.title} description={note.description} />
+
+<Features
+  id={features.id}
+  tagline={features.tagline}
+  title={features.title}
+  subtitle={features.subtitle}
+  items={[...(features.items ?? [])]}
+/>
+
+<ContentWidget
+  tagline={contentSection.tagline}
+  title={contentSection.title}
+  items={[...(contentSection.items ?? [])]}
+  image={contentSection.image}
+/>
+
+<Steps title={steps.title} items={[...(steps.items ?? [])]} image={steps.image} />
+
+<Stats stats={[...statsItems]} />
+
+<CallToAction title={callToAction.title} subtitle={callToAction.subtitle} actions={callToActionActionsWithPermalinks} />

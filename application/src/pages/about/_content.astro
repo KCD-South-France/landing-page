@@ -1,0 +1,72 @@
+---
+import TeamGrid from '~/components/ui/TeamGrid.astro';
+import Features2 from '~/components/widgets/Features2.astro';
+import Features3 from '~/components/widgets/Features3.astro';
+import Hero from '~/components/widgets/Hero.astro';
+import Steps2 from '~/components/widgets/Steps2.astro';
+import { teamMembers } from '~/data/pages/about/teamData';
+import type { Item } from '~/types';
+
+export interface Props {
+  hero: {
+    tagline?: string;
+    title?: string;
+    subtitle?: string;
+    imageAlt?: string;
+  };
+  team: {
+    title?: string;
+    subtitle?: string;
+    tagline?: string;
+  };
+  objectives: {
+    title?: string;
+    subtitle?: string;
+    items?: readonly Item[];
+  };
+  values: {
+    title?: string;
+    subtitle?: string;
+    items?: readonly Item[];
+  };
+  location: {
+    title?: string;
+    tagline?: string;
+    items?: readonly Item[];
+  };
+  contact: {
+    title?: string;
+    tagline?: string;
+    items?: readonly Item[];
+  };
+}
+
+const { hero, team, objectives, values, location, contact } = Astro.props;
+---
+
+<Hero
+  tagline={hero.tagline}
+  image={{
+    src: '~/assets/images/hero-image.png',
+    alt: hero.imageAlt,
+  }}
+>
+  <Fragment slot="title" set:html={hero.title} />
+  <Fragment slot="subtitle" set:text={hero.subtitle} />
+</Hero>
+
+<TeamGrid title={team.title} subtitle={team.subtitle} tagline={team.tagline} columns={3} items={teamMembers} />
+
+<Features3
+  title={objectives.title}
+  subtitle={objectives.subtitle}
+  columns={3}
+  isBeforeContent={true}
+  items={[...(objectives.items ?? [])]}
+/>
+
+<Steps2 title={values.title} subtitle={values.subtitle} items={[...(values.items ?? [])]} />
+
+<Features2 title={location.title} tagline={location.tagline} columns={1} items={[...(location.items ?? [])]} />
+
+<Features2 title={contact.title} tagline={contact.tagline} columns={2} items={[...(contact.items ?? [])]} />

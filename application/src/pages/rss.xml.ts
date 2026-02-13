@@ -5,14 +5,7 @@ import { fetchPosts } from '~/utils/blog';
 import { getPermalink } from '~/utils/permalinks';
 
 export const GET = async () => {
-  if (!APP_BLOG.isEnabled) {
-    return new Response(null, {
-      status: 404,
-      statusText: 'Erreur 404',
-    });
-  }
-
-  const posts = await fetchPosts();
+  const posts = APP_BLOG.isEnabled ? await fetchPosts() : [];
 
   const rss = await getRssString({
     title: `Blog - ${SITE.name}’`,
