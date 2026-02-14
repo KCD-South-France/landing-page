@@ -10,4 +10,4 @@ permissions:
 
 jobs:
   main:
-    uses: hoverkraft-tech/ci-github-common/.github/workflows/stale.yml@95664be4ec235bfc221c4356c7153cbab3fb8f93 # 0.22.3
+    uses: hoverkraft-tech/ci-github-common/.github/workflows/stale.yml@f24ce3360a8abf9bf386a62ab13d0ae5de5f9d13 # 0.31.7
