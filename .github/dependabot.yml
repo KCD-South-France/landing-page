@@ -3,7 +3,8 @@ version: 2
 updates:
   - package-ecosystem: "npm"
     open-pull-requests-limit: 20
-    directory: "/"
+    directories:
+      - "application/"
     versioning-strategy: increase
     schedule:
       interval: "weekly"
@@ -31,7 +32,8 @@ updates:
 
   - package-ecosystem: github-actions
     open-pull-requests-limit: 20
-    directory: "/"
+    directories:
+      - "/"
     schedule:
       interval: weekly
     groups:
@@ -44,7 +46,13 @@ updates:
     directory: "/"
     schedule:
       interval: weekly
+
+  - package-ecosystem: "docker"
+    open-pull-requests-limit: 20
+    directory: "/"
+    schedule:
+      interval: "weekly"
     groups:
-      devcontainers-dependencies:
+      docker-dependencies:
         patterns:
           - "*"

@@ -2,20 +2,25 @@ name: Common Continuous Integration tasks
 
 on:
   workflow_call:
+    outputs:
+      build-artifact-id:
+        description: "The build artifact ID"
+        value: ${{ jobs.continuous-integration.outputs.build-artifact-id }}
 
-permissions:
-  contents: read
-  security-events: write
-  # FIXME: This is a workaround for having workflow ref. See https://github.com/orgs/community/discussions/38659
-  id-token: write
+permissions: {}
 
 jobs:
   continuous-integration:
-    uses: hoverkraft-tech/ci-github-nodejs/.github/workflows/continuous-integration.yml@5c1010a9146952f724730bf79ba8e2e40ba8e474 # 0.11.0
+    uses: hoverkraft-tech/ci-github-nodejs/.github/workflows/continuous-integration.yml@c9d9d041ba4ef35695ee469c4782fa6a8bbebbcc # 0.21.2
+    permissions:
+      contents: read
+      id-token: write
+      packages: read
+      pull-requests: write
+      security-events: write
     with:
       working-directory: application
-      test: false
       build: |
         {
-          "artifact": ["application/dist"]
+          "artifact": ["dist"]
         }

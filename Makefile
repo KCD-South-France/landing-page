@@ -10,20 +10,17 @@ include .env
 
 setup: ## Prepare stack to run
 	cd application && npm install
-	cd .github/actions/generate-blog-post && npm install
-	cd .github/actions/generate-brand-content && npm install
-	cd .github/actions/validate-manifest && npm install
 
 start: ## Start application in dev mode
 	cd application && npm run start
 
 lint: ## Run linters
-	cd application && npm run lint -- $(filter-out $@,$(MAKECMDGOALS))
+	cd application && npm run lint:ci -- $(filter-out $@,$(MAKECMDGOALS))
 	$(call run_linter,)
 
 lint-fix: ## Run linters
-	cd application && npm audit --omit=dev
-	cd application && npm run humanize:fix
+	cd application && npm audit fix
+	cd application && npx update-browserslist-db@latest
 	cd application && npm run lint:fix
 	$(MAKE) linter-fix
 
@@ -32,9 +29,6 @@ build: ## Build libs and applications
 
 test: ## Run tests
 	cd application && npm run test:ci
-	cd .github/actions/generate-blog-post && npm run test:ci
-	cd .github/actions/generate-brand-content && npm run test:ci
-	cd .github/actions/validate-manifest && npm run test:ci
 
 ci: ## Run tests in CI mode
 	$(MAKE) lint-fix

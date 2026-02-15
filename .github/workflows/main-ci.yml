@@ -9,18 +9,21 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions: {}
+
 jobs:
   ci:
     uses: ./.github/workflows/__shared-ci.yml
     secrets: inherit
     permissions:
       contents: read
-      security-events: write
-      # FIXME: This is a workaround for having workflow ref. See https://github.com/orgs/community/discussions/38659
       id-token: write
+      packages: read
+      pull-requests: write
+      security-events: write
 
   deploy:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref_name == github.event.repository.default_branch
     name: Deploy website
     needs: ci
     runs-on: ubuntu-latest
@@ -30,8 +33,11 @@ jobs:
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.url }}
+    outputs:
+      url: ${{ steps.deployment.outputs.url }}
     steps:
       - id: deployment
-        uses: hoverkraft-tech/ci-github-publish/actions/deploy/github-pages@e38260241de6b96a9f21834ca2d399789013e7ff # 0.5.1
+        uses: hoverkraft-tech/ci-github-publish/actions/deploy/github-pages@0.21.0
         with:
-          build-assets-path: application/dist
+          build-path: application/dist
+          build-artifact-id: ${{ needs.ci.outputs.build-artifact-id }}

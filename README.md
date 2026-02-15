@@ -1,8 +1,8 @@
 # Cloud Native Provence — Landing Page
 
-Astro-based conference website with bilingual routing (`fr` / `en`) and translated slugs.
+Conference website for Cloud Native Provence, with bilingual routing (`fr` / `en`) and translated page slugs.
 
-## Development workflow (Makefile-first)
+## Development workflow
 
 Use `make` commands from the repository root.
 
@@ -15,21 +15,28 @@ Main targets:
 - `make setup` — install project dependencies
 - `make start` — start local dev server (`application`)
 - `make build` — production build
+- `make test-app` — run application tests with coverage
 - `make lint` — run linters/checks
 - `make lint-fix` — run fixers
 - `make ci` — lint + build + test pipeline
 
-Do not run `npm run ...` directly unless you are explicitly debugging Makefile behavior.
+## Tests and coverage
+
+Tests run with Vitest from `application/`.
+
+```bash
+make test
+```
 
 ## Dev Container
 
 This repository includes a VS Code Dev Container in `.devcontainer/devcontainer.json`.
 
-### Recommended usage
+Quick start:
 
 1. Open the repository in VS Code.
 2. Run `Dev Containers: Reopen in Container`.
-3. Once inside the container, run:
+3. Inside the container:
 
 ```bash
 make setup
@@ -45,31 +52,36 @@ The dev container provides:
 
 The app is available on port `4321`.
 
-## Current routing model
+## Routing model
 
-Routing is locale-first and centralized.
+Routing is locale-first and centralized:
 
 - `/` redirects to `/fr`
 - `/fr` and `/en` are localized homepages
-- `/{lang}/{translated-slug}` for content pages
+- `/{lang}/{translated-slug}` serves localized content pages
 
 Key files:
 
 - `application/src/pages/index.astro` — root redirect
 - `application/src/pages/[lang]/index.astro` — localized homepage
 - `application/src/pages/[lang]/[page].astro` — localized dynamic pages
-- `application/src/i18n/routes.ts` — route slug mapping + path helpers
+- `application/src/i18n/routes.ts` — slug mapping and path translation helpers
 
-Example translated slugs:
+Translated static pages:
 
-- FR: `/fr/a-propos`, `/fr/charte-graphique`, `/fr/politique-de-confidentialite`
-- EN: `/en/about`, `/en/brand-guidelines`, `/en/privacy-policy`
+- `about` → `/fr/a-propos` / `/en/about`
+- `contact` → `/fr/contact` / `/en/contact`
+- `sponsoring` → `/fr/sponsoring` / `/en/sponsoring`
+- `brand-guidelines` → `/fr/charte-graphique` / `/en/brand-guidelines`
+- `terms` → `/fr/conditions-generales-utilisation` / `/en/terms-of-service`
+- `privacy` → `/fr/politique-de-confidentialite` / `/en/privacy-policy`
 
-## Project structure (current)
+## Project structure
 
 ```text
 /
 ├── .devcontainer/
+├── .github/
 ├── Makefile
 ├── Dockerfile
 ├── README.md
@@ -79,41 +91,37 @@ Example translated slugs:
     ├── public/
     │   ├── _headers
     │   ├── robots.txt
-    │   └── .well-known/appspecific/com.chrome.devtools.json
-    └── src/
-        ├── assets/
-        ├── components/
-        ├── i18n/
-        │   ├── ui.ts
-        │   ├── utils.ts
-        │   └── routes.ts
-        ├── layouts/
-        ├── pages/
-        │   ├── [lang]/
-        │   │   ├── index.astro
-        │   │   └── [page].astro
-        │   ├── [...blog]/
-        │   ├── home/
-        │   ├── about/
-        │   ├── contact/
-        │   ├── sponsoring/
-        │   ├── brand-guidelines/
-        │   ├── terms/
-        │   ├── privacy/
-        │   ├── index.astro
-        │   ├── rss.xml.ts
-        │   └── 404.astro
-        └── utils/
+    │   └── logos/
+    ├── src/
+    │   ├── assets/
+    │   ├── components/
+    │   ├── content/
+    │   ├── data/
+    │   ├── i18n/
+    │   ├── layouts/
+    │   ├── pages/
+    │   │   ├── [...blog]/
+    │   │   ├── [lang]/
+    │   │   ├── about/
+    │   │   ├── brand-guidelines/
+    │   │   ├── contact/
+    │   │   ├── home/
+    │   │   ├── privacy/
+    │   │   ├── sponsoring/
+    │   │   ├── terms/
+    │   │   ├── 404.astro
+    │   │   ├── index.astro
+    │   │   └── rss.xml.ts
+    │   └── utils/
+    └── vendor/
 ```
 
-## Configuration
+## Configuration and build
 
-Primary site configuration: `application/src/config.yaml`.
+- Site and app settings: `application/src/config.yaml`
+- Astro configuration and integrations: `application/astro.config.ts`
+- Static build output: `application/dist/`
 
-Astro framework configuration: `application/astro.config.ts`.
+## CI
 
-## Build output
-
-Production build output is generated in:
-
-- `application/dist/`
+GitHub Actions CI runs from the `application/` directory and builds the static site output in `application/dist`.
