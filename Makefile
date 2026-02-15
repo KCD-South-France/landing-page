@@ -9,28 +9,28 @@ help: ## Show help message
 include .env
 
 setup: ## Prepare stack to run
-	cd application && npm install
+	npm --prefix application install
 
 start: ## Start application in dev mode
-	cd application && npm run start
+	npm --prefix application run start
 
 lint: ## Run linters
-	cd application && npm run lint:ci -- $(filter-out $@,$(MAKECMDGOALS))
+	npm --prefix application run lint:ci -- $(filter-out $@,$(MAKECMDGOALS))
 	$(call run_linter,)
 
 lint-fix: ## Run linters
-	cd application && npm audit fix
-	cd application && npx update-browserslist-db@latest
-	cd application && npm run lint:fix
+	npm --prefix application run lint:fix
 	$(MAKE) linter-fix
 
 build: ## Build libs and applications
-	cd application && npm run build
+	npm --prefix application run build
 
 test: ## Run tests
-	cd application && npm run test:ci
+	npm --prefix application run test:ci
 
 ci: ## Run tests in CI mode
+	npm --prefix application audit fix --force
+	cd application && npx update-browserslist-db@latest
 	$(MAKE) lint-fix
 	$(MAKE) build
 	$(MAKE) test

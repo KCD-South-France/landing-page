@@ -8,7 +8,7 @@ import { isUnpicCompatible } from './images-optimization';
 
 describe('images helpers', () => {
     it('returns non-string input unchanged in findImage', async () => {
-        const metadata = { src: '/img.png', width: 10, height: 10 };
+        const metadata = { src: '/img.png', width: 10, height: 10, format: 'png' as const };
         await expect(findImage(metadata)).resolves.toEqual(metadata);
     });
 
@@ -45,7 +45,7 @@ describe('images helpers', () => {
     it('returns empty url object when image entry has no url', async () => {
         const result = await adaptOpenGraphImages(
             {
-                images: [{}],
+                images: [{} as never],
             },
             new URL('https://cloudnative-provence.fr')
         );
