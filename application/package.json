@@ -12,6 +12,10 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:ci": "npm run test -- --reporter=default --reporter=junit --outputFile=junit.xml --coverage.enabled --coverage.reporter=lcov --coverage.reporter=text",
     "lint": "npm run lint:astro && npm run lint:eslint && npm run lint:prettier",
     "lint:astro": "astro check",
     "lint:eslint": "eslint .",
@@ -19,7 +23,11 @@
     "lint:fix": "npm run lint:fix:astro && npm run lint:fix:eslint && npm run lint:fix:prettier",
     "lint:fix:astro": "npm run lint:astro -- --fix",
     "lint:fix:eslint": "npm run lint:eslint -- --fix .",
-    "lint:fix:prettier": "npm run lint:prettier -- -w"
+    "lint:fix:prettier": "npm run lint:prettier -- -w",
+    "lint:ci:astro": "npm run lint:astro | tee astro-report.txt",
+    "lint:ci:eslint": "npm run lint:eslint -- --format json -o eslint-report.json",
+    "lint:ci:prettier": "npm run lint:prettier | tee prettier-report.txt",
+    "lint:ci": "npm run lint:ci:astro && npm run lint:ci:eslint && npm run lint:ci:prettier"
   },
   "dependencies": {
     "@astrojs/rss": "^4.0.11",
@@ -48,6 +56,7 @@
     "@types/mdx": "^2.0.13",
     "@typescript-eslint/eslint-plugin": "^8.30.1",
     "@typescript-eslint/parser": "^8.30.1",
+    "@vitest/coverage-v8": "^4.0.18",
     "astro-compress": "2.3.8",
     "astro-eslint-parser": "^1.2.2",
     "eslint": "^9.24.0",
@@ -63,6 +72,7 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.30.1",
-    "unist-util-visit": "^5.0.0"
+    "unist-util-visit": "^5.0.0",
+    "vitest": "^4.0.18"
   }
 }

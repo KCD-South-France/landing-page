@@ -11,6 +11,12 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# testing
+junit.xml
+coverage/
+astro-report.txt
+eslint-report.json
+prettier-report.txt
 
 # environment variables
 .env
