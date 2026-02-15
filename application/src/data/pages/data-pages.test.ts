@@ -17,41 +17,41 @@ import termsEn from './terms/en';
 import termsFr from './terms/fr';
 
 describe('localized page data modules', () => {
-    it('has valid direct imports for all page data files', () => {
-        const modules = [
-            aboutEn,
-            aboutFr,
-            teamMembers,
-            brandEnContent,
-            brandFrContent,
-            contactEn,
-            contactFr,
-            homeEn,
-            homeFr,
-            privacyEn,
-            privacyFr,
-            sponsoringEn,
-            sponsoringFr,
-            termsEn,
-            termsFr,
-        ];
+  it('has valid direct imports for all page data files', () => {
+    const modules = [
+      aboutEn,
+      aboutFr,
+      teamMembers,
+      brandEnContent,
+      brandFrContent,
+      contactEn,
+      contactFr,
+      homeEn,
+      homeFr,
+      privacyEn,
+      privacyFr,
+      sponsoringEn,
+      sponsoringFr,
+      termsEn,
+      termsFr,
+    ];
 
-        expect(modules).toHaveLength(15);
-        modules.forEach((mod) => {
-            expect(mod).toBeTruthy();
-        });
+    expect(modules).toHaveLength(15);
+    modules.forEach((mod) => {
+      expect(mod).toBeTruthy();
     });
+  });
 
-    it('loads all page data modules with exports', () => {
-        const modules = import.meta.glob('./**/*.ts', { eager: true });
-        const files = Object.entries(modules).filter(([path]) => !path.endsWith('.test.ts'));
+  it('loads all page data modules with exports', () => {
+    const modules = import.meta.glob('./**/*.ts', { eager: true });
+    const files = Object.entries(modules).filter(([path]) => !path.endsWith('.test.ts'));
 
-        expect(files.length).toBeGreaterThan(0);
+    expect(files.length).toBeGreaterThan(0);
 
-        for (const [, mod] of files) {
-            const exportedValues = Object.values(mod as Record<string, unknown>);
-            expect(exportedValues.length).toBeGreaterThan(0);
-            expect(exportedValues.some((value) => typeof value === 'object' || typeof value === 'function')).toBe(true);
-        }
-    });
+    for (const [, mod] of files) {
+      const exportedValues = Object.values(mod as Record<string, unknown>);
+      expect(exportedValues.length).toBeGreaterThan(0);
+      expect(exportedValues.some((value) => typeof value === 'object' || typeof value === 'function')).toBe(true);
+    }
+  });
 });

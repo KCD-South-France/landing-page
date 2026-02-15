@@ -2,6 +2,8 @@ import { describe, expect, it } from 'vitest';
 
 import { lazyImagesRehypePlugin, readingTimeRemarkPlugin, responsiveTablesRehypePlugin } from './frontmatter';
 
+type Transformer = (tree: unknown, file?: unknown, next?: () => void) => void;
+
 describe('frontmatter plugins', () => {
     it('adds reading time into Astro frontmatter data', () => {
         const tree = {
@@ -10,7 +12,7 @@ describe('frontmatter plugins', () => {
         };
         const file = { data: { astro: { frontmatter: {} as Record<string, unknown> } } };
 
-        const plugin = readingTimeRemarkPlugin();
+        const plugin = (readingTimeRemarkPlugin as unknown as () => Transformer)();
         plugin(tree as never, file as never);
 
         expect(typeof file.data.astro.frontmatter.readingTime).toBe('number');
@@ -30,7 +32,7 @@ describe('frontmatter plugins', () => {
             ],
         };
 
-        const plugin = responsiveTablesRehypePlugin();
+        const plugin = (responsiveTablesRehypePlugin as unknown as () => Transformer)();
         plugin(tree as never);
 
         expect((tree.children[0] as { tagName?: string }).tagName).toBe('div');
@@ -56,7 +58,7 @@ describe('frontmatter plugins', () => {
             ],
         };
 
-        const plugin = lazyImagesRehypePlugin();
+        const plugin = (lazyImagesRehypePlugin as unknown as () => Transformer)();
         plugin(tree as never);
 
         const imageNode = (tree.children[0] as { children: Array<{ properties: Record<string, unknown> }> }).children[0];
@@ -69,13 +71,13 @@ describe('frontmatter plugins', () => {
             children: [{ type: 'text', value: 'No frontmatter target.' }],
         };
 
-        const plugin = readingTimeRemarkPlugin();
+        const plugin = (readingTimeRemarkPlugin as unknown as () => Transformer)();
         expect(() => plugin(tree as never, { data: {} } as never)).not.toThrow();
     });
 
     it('keeps trees unchanged when children are missing', () => {
-        const responsivePlugin = responsiveTablesRehypePlugin();
-        const lazyPlugin = lazyImagesRehypePlugin();
+        const responsivePlugin = (responsiveTablesRehypePlugin as unknown as () => Transformer)();
+        const lazyPlugin = (lazyImagesRehypePlugin as unknown as () => Transformer)();
 
         expect(() => responsivePlugin({ type: 'root' } as never)).not.toThrow();
         expect(() => lazyPlugin({ type: 'root' } as never)).not.toThrow();
