@@ -1,8 +1,15 @@
 import { describe, expect, it, vi } from 'vitest';
 import { createAstrowindConfigMock } from '~/test/mocks/astrowind-config';
 
+const { getRssStringMock } = vi.hoisted(() => ({
+  getRssStringMock: vi.fn(async () => '<rss>ok</rss>'),
+}));
+
 vi.mock('astrowind:config', () =>
   createAstrowindConfigMock({
+    METADATA: {
+      description: '',
+    },
     APP_BLOG: {
       isEnabled: true,
     },
@@ -10,7 +17,7 @@ vi.mock('astrowind:config', () =>
 );
 
 vi.mock('@astrojs/rss', () => ({
-  getRssString: vi.fn(async () => '<rss>ok</rss>'),
+  getRssString: getRssStringMock,
 }));
 
 vi.mock('~/utils/blog', () => ({
@@ -35,5 +42,11 @@ describe('rss endpoint', () => {
     const response = await GET();
     expect(response.headers.get('Content-Type')).toBe('application/xml');
     await expect(response.text()).resolves.toContain('<rss>ok</rss>');
+
+    expect(getRssStringMock).toHaveBeenCalledWith(
+      expect.objectContaining({
+        description: '',
+      })
+    );
   });
 });

@@ -28,6 +28,8 @@ export const createAstroContentSchemaMock = () => ({
     array: () => createOptionalChain(),
     number: () => createOptionalChain(),
     date: () => createOptionalChain(),
+    enum: () => createOptionalChain(),
+    nativeEnum: () => createOptionalChain(),
   },
   defineCollection: vi.fn((input) => input),
 });

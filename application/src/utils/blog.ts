@@ -3,7 +3,23 @@ import { getCollection, render } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
 import type { Post } from '~/types';
 import { APP_BLOG } from 'astrowind:config';
+import { defaultLang, languages } from '~/i18n/ui';
+import type { AppLang } from '~/i18n/routes';
 import { cleanSlug, trimSlash, BLOG_BASE, POST_PERMALINK_PATTERN, CATEGORY_BASE, TAG_BASE } from './permalinks';
+
+type PostCollectionData = CollectionEntry<'post'>['data'];
+type PreparedEntry = {
+  id: string;
+  data: PostCollectionData;
+  Content: Post['Content'];
+  readingTime?: number;
+};
+
+type PostGroup = {
+  common?: PreparedEntry;
+  legacy?: PreparedEntry;
+  locales: Partial<Record<AppLang, PreparedEntry>>;
+};
 
 const generatePermalink = async ({
   id,
@@ -15,7 +31,7 @@ const generatePermalink = async ({
   slug: string;
   publishDate: Date;
   category: string | undefined;
-}) => {
+}): Promise<string> => {
   const year = String(publishDate.getFullYear()).padStart(4, '0');
   const month = String(publishDate.getMonth() + 1).padStart(2, '0');
   const day = String(publishDate.getDate()).padStart(2, '0');
@@ -40,16 +56,51 @@ const generatePermalink = async ({
     .join('/');
 };
 
-const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> => {
-  const { id, data } = post;
-  const { Content, remarkPluginFrontmatter } = await render(post);
+const getPreparedEntry = async (entry: CollectionEntry<'post'>): Promise<PreparedEntry> => {
+  const { Content, remarkPluginFrontmatter } = await render(entry);
 
+  return {
+    id: entry.id,
+    data: entry.data,
+    Content,
+    readingTime: remarkPluginFrontmatter?.readingTime,
+  };
+};
+
+const getEntryFileName = (id: string): string => {
+  const value = id.split('/').pop() || id;
+  return value.replace(/\.(md|mdx)$/i, '');
+};
+
+const getEntryFolderKey = (id: string): string => {
+  const parts = id.split('/');
+  if (parts.length <= 1) return id;
+  return parts.slice(0, -1).join('/');
+};
+
+const normalizePostFromData = async ({
+  id,
+  data,
+  content,
+  readingTime,
+  fallbackSlug,
+  fallbackLocale,
+}: {
+  id: string;
+  data: PostCollectionData;
+  content: Post['Content'];
+  readingTime?: number;
+  fallbackSlug?: string;
+  fallbackLocale?: AppLang;
+}): Promise<Post | null> => {
   const {
     publishDate: rawPublishDate = new Date(),
     updateDate: rawUpdateDate,
     title,
     excerpt,
     image,
+    slug: rawSlug,
+    locale: rawLocale,
     tags: rawTags = [],
     category: rawCategory,
     author,
@@ -57,7 +108,13 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
     metadata = {},
   } = data;
 
-  const slug = cleanSlug(id); // cleanSlug(rawSlug.split('/').pop());
+  if (!title) return null;
+
+  const slug = cleanSlug(rawSlug || fallbackSlug || id.split('/').pop() || id);
+  const locale: AppLang =
+    (rawLocale && rawLocale in languages ? (rawLocale as AppLang) : undefined) ||
+    fallbackLocale ||
+    (defaultLang as AppLang);
   const publishDate = new Date(rawPublishDate);
   const updateDate = rawUpdateDate ? new Date(rawUpdateDate) : undefined;
 
@@ -74,37 +131,103 @@ const getNormalizedPost = async (post: CollectionEntry<'post'>): Promise<Post> =
   }));
 
   return {
-    id: id,
-    slug: slug,
+    id,
+    slug,
+    locale,
     permalink: await generatePermalink({ id, slug, publishDate, category: category?.slug }),
-
-    publishDate: publishDate,
-    updateDate: updateDate,
-
-    title: title,
-    excerpt: excerpt,
-    image: image,
-
-    category: category,
-    tags: tags,
-    author: author,
-
-    draft: draft,
-
+    publishDate,
+    updateDate,
+    title,
+    excerpt,
+    image,
+    category,
+    tags,
+    author,
+    draft,
     metadata,
-
-    Content: Content,
-    // or 'content' in case you consume from API
-
-    readingTime: remarkPluginFrontmatter?.readingTime,
+    Content: content,
+    readingTime,
   };
 };
 
-const load = async function (): Promise<Array<Post>> {
-  const posts = await getCollection('post');
-  const normalizedPosts = posts.map(async (post) => await getNormalizedPost(post));
+const mergePostData = (
+  commonData: PostCollectionData | undefined,
+  localeData: PostCollectionData
+): PostCollectionData => {
+  return {
+    ...commonData,
+    ...localeData,
+    metadata: {
+      ...(commonData?.metadata || {}),
+      ...(localeData.metadata || {}),
+    },
+  };
+};
 
-  const results = (await Promise.all(normalizedPosts))
+const buildPostGroups = (entries: PreparedEntry[]): Record<string, PostGroup> => {
+  return entries.reduce<Record<string, PostGroup>>((acc, entry) => {
+    const fileName = getEntryFileName(entry.id);
+    const folderKey = getEntryFolderKey(entry.id);
+    const key = fileName === 'common' || fileName === 'fr' || fileName === 'en' ? folderKey : entry.id;
+
+    if (!acc[key]) {
+      acc[key] = { locales: {} };
+    }
+
+    if (fileName === 'common') {
+      acc[key].common = entry;
+    } else if (fileName === 'fr' || fileName === 'en') {
+      acc[key].locales[fileName as AppLang] = entry;
+    } else {
+      acc[key].legacy = entry;
+    }
+
+    return acc;
+  }, {});
+};
+
+const load = async function (): Promise<Array<Post>> {
+  const entries = await getCollection('post');
+  const preparedEntries = await Promise.all(entries.map((entry) => getPreparedEntry(entry)));
+  const groupedEntries = buildPostGroups(preparedEntries);
+
+  const postsByGroup = await Promise.all(
+    Object.entries(groupedEntries).map(async ([groupKey, group]) => {
+      if (group.legacy) {
+        const legacyPost = await normalizePostFromData({
+          id: group.legacy.id,
+          data: group.legacy.data,
+          content: group.legacy.Content,
+          readingTime: group.legacy.readingTime,
+          fallbackSlug: cleanSlug(groupKey),
+        });
+
+        return legacyPost ? [legacyPost] : [];
+      }
+
+      const localizedPosts = await Promise.all(
+        getSupportedBlogLangs().map(async (locale) => {
+          const localeEntry = group.locales[locale];
+          if (!localeEntry) return null;
+
+          const mergedData = mergePostData(group.common?.data, localeEntry.data);
+          return normalizePostFromData({
+            id: `${groupKey}/${locale}`,
+            data: mergedData,
+            content: localeEntry.Content,
+            readingTime: localeEntry.readingTime,
+            fallbackSlug: cleanSlug(groupKey),
+            fallbackLocale: locale,
+          });
+        })
+      );
+
+      return localizedPosts.filter((post): post is Post => !!post);
+    })
+  );
+
+  const results = postsByGroup
+    .flat()
     .sort((a, b) => b.publishDate.valueOf() - a.publishDate.valueOf())
     .filter((post) => !post.draft);
 
@@ -128,6 +251,11 @@ export const blogTagRobots = APP_BLOG.tag.robots;
 
 export const blogPostsPerPage = APP_BLOG?.postsPerPage;
 
+const getSupportedBlogLangs = (): AppLang[] => Object.keys(languages) as AppLang[];
+const filterPostsByLang = (posts: Array<Post>, lang: AppLang): Array<Post> =>
+  posts.filter((post) => post.locale === lang);
+const getPostTranslationGroupKey = (post: Post): string => post.id.replace(/\/(fr|en)$/, '');
+
 /** */
 export const fetchPosts = async (): Promise<Array<Post>> => {
   if (!_posts) {
@@ -138,109 +266,123 @@ export const fetchPosts = async (): Promise<Array<Post>> => {
 };
 
 /** */
-export const findPostsBySlugs = async (slugs: Array<string>): Promise<Array<Post>> => {
+export const findPostsBySlugs = async (slugs: Array<string>, locale?: AppLang): Promise<Array<Post>> => {
   if (!Array.isArray(slugs)) return [];
 
   const posts = await fetchPosts();
+  const slugSet = new Set(slugs);
 
-  return slugs.reduce(function (r: Array<Post>, slug: string) {
-    posts.some(function (post: Post) {
-      return slug === post.slug && r.push(post);
-    });
-    return r;
-  }, []);
+  return posts.filter((post) => slugSet.has(post.slug) && (!locale || post.locale === locale));
 };
 
 /** */
-export const findPostsByIds = async (ids: Array<string>): Promise<Array<Post>> => {
+export const findPostsByIds = async (ids: Array<string>, locale?: AppLang): Promise<Array<Post>> => {
   if (!Array.isArray(ids)) return [];
 
   const posts = await fetchPosts();
+  const idSet = new Set(ids);
 
-  return ids.reduce(function (r: Array<Post>, id: string) {
-    posts.some(function (post: Post) {
-      return id === post.id && r.push(post);
-    });
-    return r;
-  }, []);
+  return posts.filter((post) => idSet.has(post.id) && (!locale || post.locale === locale));
 };
 
 /** */
-export const findLatestPosts = async ({ count }: { count?: number }): Promise<Array<Post>> => {
+export const findLatestPosts = async ({
+  count,
+  locale,
+}: {
+  count?: number;
+  locale?: AppLang;
+}): Promise<Array<Post>> => {
   const _count = count || 4;
   const posts = await fetchPosts();
+  const filteredPosts = locale ? posts.filter((post) => post.locale === locale) : posts;
 
-  return posts ? posts.slice(0, _count) : [];
+  return filteredPosts ? filteredPosts.slice(0, _count) : [];
 };
 
 /** */
 export const getStaticPathsBlogList = async ({ paginate }: { paginate: PaginateFunction }) => {
   if (!isBlogEnabled || !isBlogListRouteEnabled) return [];
-  return paginate(await fetchPosts(), {
-    params: { blog: BLOG_BASE || undefined },
-    pageSize: blogPostsPerPage,
-  });
+
+  const posts = await fetchPosts();
+  return getSupportedBlogLangs().flatMap((lang) =>
+    paginate(filterPostsByLang(posts, lang), {
+      params: { lang, blog: BLOG_BASE || undefined },
+      pageSize: blogPostsPerPage,
+    })
+  );
 };
 
 /** */
 export const getStaticPathsBlogPost = async () => {
   if (!isBlogEnabled || !isBlogPostRouteEnabled) return [];
-  return (await fetchPosts()).flatMap((post) => ({
-    params: {
-      blog: post.permalink,
-    },
-    props: { post },
-  }));
+
+  const posts = await fetchPosts();
+  return getSupportedBlogLangs().flatMap((lang) =>
+    filterPostsByLang(posts, lang).flatMap((post) => ({
+      params: {
+        lang,
+        blog: post.permalink,
+      },
+      props: { post },
+    }))
+  );
 };
 
 /** */
 export const getStaticPathsBlogCategory = async ({ paginate }: { paginate: PaginateFunction }) => {
   if (!isBlogEnabled || !isBlogCategoryRouteEnabled) return [];
 
-  const posts = await fetchPosts();
-  const categories = {};
-  posts.map((post) => {
-    if (post.category?.slug) {
-      categories[post.category?.slug] = post.category;
-    }
-  });
-
-  return Array.from(Object.keys(categories)).flatMap((categorySlug) =>
-    paginate(
-      posts.filter((post) => post.category?.slug && categorySlug === post.category?.slug),
-      {
-        params: { category: categorySlug, blog: CATEGORY_BASE || undefined },
-        pageSize: blogPostsPerPage,
-        props: { category: categories[categorySlug] },
+  const allPosts = await fetchPosts();
+  return getSupportedBlogLangs().flatMap((lang) => {
+    const categories: Record<string, NonNullable<Post['category']>> = {};
+    const posts = filterPostsByLang(allPosts, lang);
+    posts.forEach((post) => {
+      if (post.category?.slug) {
+        categories[post.category.slug] = post.category;
       }
-    )
-  );
+    });
+
+    return Array.from(Object.keys(categories)).flatMap((categorySlug) =>
+      paginate(
+        posts.filter((post) => post.category?.slug && categorySlug === post.category?.slug),
+        {
+          params: { lang, category: categorySlug, blog: CATEGORY_BASE || undefined },
+          pageSize: blogPostsPerPage,
+          props: { category: categories[categorySlug] },
+        }
+      )
+    );
+  });
 };
 
 /** */
 export const getStaticPathsBlogTag = async ({ paginate }: { paginate: PaginateFunction }) => {
   if (!isBlogEnabled || !isBlogTagRouteEnabled) return [];
 
-  const posts = await fetchPosts();
-  const tags = {};
-  posts.map((post) => {
-    if (Array.isArray(post.tags)) {
-      post.tags.map((tag) => {
-        tags[tag?.slug] = tag;
-      });
-    }
-  });
-
-  return Array.from(Object.keys(tags)).flatMap((tagSlug) =>
-    paginate(
-      posts.filter((post) => Array.isArray(post.tags) && post.tags.find((elem) => elem.slug === tagSlug)),
-      {
-        params: { tag: tagSlug, blog: TAG_BASE || undefined },
-        pageSize: blogPostsPerPage,
-        props: { tag: tags[tagSlug] },
+  const allPosts = await fetchPosts();
+  return getSupportedBlogLangs().flatMap((lang) => {
+    const tags: Record<string, NonNullable<Post['tags']>[number]> = {};
+    const posts = filterPostsByLang(allPosts, lang);
+    posts.forEach((post) => {
+      if (Array.isArray(post.tags)) {
+        post.tags.forEach((tag) => {
+          tags[tag.slug] = tag;
+        });
       }
-    )
-  );
+    });
+
+    return Array.from(Object.keys(tags)).flatMap((tagSlug) =>
+      paginate(
+        posts.filter((post) => Array.isArray(post.tags) && post.tags.find((elem) => elem.slug === tagSlug)),
+        {
+          params: { lang, tag: tagSlug, blog: TAG_BASE || undefined },
+          pageSize: blogPostsPerPage,
+          props: { tag: tags[tagSlug] },
+        }
+      )
+    );
+  });
 };
 
 /** */
@@ -249,6 +391,7 @@ export async function getRelatedPosts(originalPost: Post, maxResults: number = 4
   const originalTagsSet = new Set(originalPost.tags ? originalPost.tags.map((tag) => tag.slug) : []);
 
   const postsWithScores = allPosts.reduce((acc: { post: Post; score: number }[], iteratedPost: Post) => {
+    if (iteratedPost.locale !== originalPost.locale) return acc;
     if (iteratedPost.slug === originalPost.slug) return acc;
 
     let score = 0;
@@ -279,3 +422,55 @@ export async function getRelatedPosts(originalPost: Post, maxResults: number = 4
 
   return selectedPosts;
 }
+
+export const translateBlogPermalinkForLocale = ({
+  posts,
+  sourcePermalink,
+  sourceLang,
+  targetLang,
+}: {
+  posts: Array<Post>;
+  sourcePermalink: string;
+  sourceLang: AppLang;
+  targetLang: AppLang;
+}): string | undefined => {
+  if (sourceLang === targetLang) {
+    return trimSlash(sourcePermalink);
+  }
+
+  const normalizedPermalink = trimSlash(sourcePermalink);
+  const sourcePost = posts.find(
+    (post) => post.locale === sourceLang && trimSlash(post.permalink) === normalizedPermalink
+  );
+
+  if (!sourcePost) return undefined;
+
+  const translationGroupKey = getPostTranslationGroupKey(sourcePost);
+  const translatedPost = posts.find(
+    (post) => post.locale === targetLang && getPostTranslationGroupKey(post) === translationGroupKey
+  );
+
+  return translatedPost ? trimSlash(translatedPost.permalink) : undefined;
+};
+
+export const findLocalizedBlogPath = async (path: string, targetLang: AppLang): Promise<string | undefined> => {
+  const parts = path.split('/').filter(Boolean);
+  if (parts.length < 2) return undefined;
+
+  const sourceLang = parts[0] as AppLang;
+  if (!(sourceLang in languages)) return undefined;
+
+  if (parts[1] !== BLOG_BASE) return undefined;
+
+  const sourcePermalink = parts.slice(1).join('/');
+  const posts = await fetchPosts();
+
+  const translatedPermalink = translateBlogPermalinkForLocale({
+    posts,
+    sourcePermalink,
+    sourceLang,
+    targetLang,
+  });
+
+  return translatedPermalink ? `/${targetLang}/${translatedPermalink}` : undefined;
+};

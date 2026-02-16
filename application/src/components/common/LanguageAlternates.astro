@@ -1,27 +1,28 @@
 ---
 import { languages, defaultLang } from '~/i18n/ui';
+import { translatePathToLang } from '~/i18n/routes';
+import { findLocalizedBlogPath } from '~/utils/blog';
 
 const currentPath = Astro.url.pathname;
-
-// Extract the current language from the path
-const pathParts = currentPath.split('/').filter(Boolean);
-
-// Get the path without language prefix
-const pathWithoutLang = pathParts[0] in languages ? '/' + pathParts.slice(1).join('/') : currentPath;
-
-// Ensure path ends consistently
-const normalizedPath = pathWithoutLang === '/' ? '/' : pathWithoutLang.replace(/\/$/, '');
 
 if (!Astro.site) {
   throw new Error('Astro.site is required for generating language alternates');
 }
 
 const baseUrl = Astro.site.origin;
+const alternateLinks = await Promise.all(
+  Object.keys(languages).map(async (lang) => {
+    const locale = lang as keyof typeof languages;
+    const blogAwarePath = await findLocalizedBlogPath(currentPath, locale);
+
+    return {
+      lang,
+      path: blogAwarePath || translatePathToLang(currentPath, locale),
+    };
+  })
+);
+const defaultAlternate = alternateLinks.find((entry) => entry.lang === defaultLang);
 ---
 
-{
-  Object.keys(languages).map((lang) => (
-    <link rel="alternate" hreflang={lang} href={`${baseUrl}/${lang}${normalizedPath}`} />
-  ))
-}
-<link rel="alternate" hreflang="x-default" href={`${baseUrl}/${defaultLang}${normalizedPath}`} />
+{alternateLinks.map(({ lang, path }) => <link rel="alternate" hreflang={lang} href={`${baseUrl}${path}`} />)}
+<link rel="alternate" hreflang="x-default" href={`${baseUrl}${defaultAlternate?.path || `/${defaultLang}`}`} />

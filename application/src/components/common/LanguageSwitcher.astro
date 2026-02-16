@@ -2,17 +2,29 @@
 import { languages } from '~/i18n/ui';
 import { getLangFromUrl } from '~/i18n/utils';
 import { translatePathToLang } from '~/i18n/routes';
+import { findLocalizedBlogPath } from '~/utils/blog';
 
 const lang = getLangFromUrl(Astro.url);
 const currentPath = Astro.url.pathname;
+const languageLinks = await Promise.all(
+  Object.entries(languages).map(async ([langCode]) => {
+    const locale = langCode as keyof typeof languages;
+    const blogAwarePath = await findLocalizedBlogPath(currentPath, locale);
+
+    return {
+      langCode,
+      href: blogAwarePath || translatePathToLang(currentPath, locale),
+    };
+  })
+);
 ---
 
 <div class="relative inline-block text-left">
   <div class="flex items-center space-x-2">
     {
-      Object.entries(languages).map(([langCode]) => (
+      languageLinks.map(({ langCode, href }) => (
         <a
-          href={translatePathToLang(currentPath, langCode as keyof typeof languages)}
+          href={href}
           class:list={[
             'px-3 py-2 text-sm font-medium rounded-md transition-colors',
             lang === langCode
