@@ -1,6 +1,6 @@
-# Cloud Native Provence — Landing Page
+# Cloud Native Provence - Landing Page
 
-Conference website for Cloud Native Provence, with bilingual routing (`fr` / `en`) and translated page slugs.
+Conference site for Cloud Native Provence, with bilingual routing (`fr` / `en`) and translated page slugs.
 
 ## Development workflow
 
@@ -12,13 +12,13 @@ make help
 
 Main targets:
 
-- `make setup` — install project dependencies
-- `make start` — start local dev server (`application`)
-- `make build` — production build
-- `make test-app` — run application tests with coverage
-- `make lint` — run linters/checks
-- `make lint-fix` — run fixers
-- `make ci` — lint + build + test pipeline
+- `make setup` - install project dependencies
+- `make start` - start local dev server (`application`)
+- `make build` - production build
+- `make test` - run application tests with coverage
+- `make lint` - run linters/checks
+- `make lint-fix` - run fixers
+- `make ci` - lint + build + test pipeline
 
 ## Tests and coverage
 
@@ -30,11 +30,11 @@ make test
 
 ## Dev Container
 
-This repository includes a VS Code Dev Container in `.devcontainer/devcontainer.json`.
+This repository includes a Visual Studio Code Dev Container in `.devcontainer/devcontainer.json`.
 
 Quick start:
 
-1. Open the repository in VS Code.
+1. Open the repository in Visual Studio Code.
 2. Run `Dev Containers: Reopen in Container`.
 3. Inside the container:
 
@@ -48,7 +48,7 @@ The dev container provides:
 - Node.js
 - Docker-in-Docker
 - GitHub CLI
-- VS Code extensions for Astro, ESLint, Prettier, Tailwind, Makefile, Copilot
+- Visual Studio Code extensions for Astro, ESLint, Prettier, Tailwind, Makefile, Copilot
 
 The app is available on port `4321`.
 
@@ -59,13 +59,14 @@ Routing is locale-first and centralized:
 - `/` redirects to `/fr`
 - `/fr` and `/en` are localized homepages
 - `/{lang}/{translated-slug}` serves localized content pages
+- `/{lang}/blog/...` serves localized blog list, posts, categories, and tags
 
 Key files:
 
-- `application/src/pages/index.astro` — root redirect
-- `application/src/pages/[lang]/index.astro` — localized homepage
-- `application/src/pages/[lang]/[page].astro` — localized dynamic pages
-- `application/src/i18n/routes.ts` — slug mapping and path translation helpers
+- `application/src/pages/index.astro` - root redirect
+- `application/src/pages/[lang]/index.astro` - localized homepage
+- `application/src/pages/[lang]/[page].astro` - localized dynamic pages
+- `application/src/i18n/routes.ts` - slug mapping and path translation helpers
 
 Translated static pages:
 
@@ -100,7 +101,6 @@ Translated static pages:
     │   ├── i18n/
     │   ├── layouts/
     │   ├── pages/
-    │   │   ├── [...blog]/
     │   │   ├── [lang]/
     │   │   ├── about/
     │   │   ├── brand-guidelines/

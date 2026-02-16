@@ -6,6 +6,7 @@ import Image from '~/components/common/Image.astro';
 
 import { findImage } from '~/utils/images';
 import { getPermalink } from '~/utils/permalinks';
+import { getLangFromUrl } from '~/i18n/utils';
 
 export interface Props {
   post: Post;
@@ -13,8 +14,9 @@ export interface Props {
 
 const { post } = Astro.props;
 const image = await findImage(post.image);
+const currentLang = getLangFromUrl(Astro.url);
 
-const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post') : '';
+const link = APP_BLOG?.post?.isEnabled ? getPermalink(post.permalink, 'post', currentLang) : '';
 ---
 
 <article

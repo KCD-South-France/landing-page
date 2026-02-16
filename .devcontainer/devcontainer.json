@@ -6,9 +6,7 @@
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
     "ghcr.io/devcontainers/features/github-cli:1": {}
   },
-  "forwardPorts": [
-    4321
-  ],
+  "forwardPorts": [4321],
   "secrets": {},
   "remoteEnv": {
     "GITHUB_TOKEN": "${localEnv:GITHUB_TOKEN}"
@@ -33,15 +31,11 @@
         "servers": {
           "playwright": {
             "command": "npx",
-            "args": [
-              "@playwright/mcp@latest"
-            ]
+            "args": ["@playwright/mcp@latest"]
           },
           "lighthouse": {
             "command": "npx",
-            "args": [
-              "lighthouse-mcp"
-            ]
+            "args": ["lighthouse-mcp"]
           }
         }
       }

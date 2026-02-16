@@ -21,13 +21,18 @@ const hasExternalScripts = false;
 const whenExternalScripts = (items: (() => AstroIntegration) | (() => AstroIntegration)[] = []) =>
   hasExternalScripts ? (Array.isArray(items) ? items.map((item) => item()) : [items()]) : [];
 
+const defaultLocale = 'fr';
+
 export default defineConfig({
   site: 'https://cloudnative-provence.fr',
   base: '/',
   output: 'static',
+  redirects: {
+    '/': '/' + defaultLocale,
+  },
   i18n: {
-    locales: ['fr', 'en'],
-    defaultLocale: 'fr',
+    locales: [defaultLocale, 'en'],
+    defaultLocale,
   },
   integrations: [
     tailwind({
@@ -77,7 +82,7 @@ export default defineConfig({
   ],
 
   image: {
-    domains: ['cdn.pixabay.com'],
+    domains: [],
   },
 
   markdown: {

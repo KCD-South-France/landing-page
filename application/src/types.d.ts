@@ -11,6 +11,9 @@ export interface Post {
   /**  */
   permalink: string;
 
+  /** Locale of the post content. */
+  locale: 'fr' | 'en';
+
   /**  */
   publishDate: Date;
   /**  */

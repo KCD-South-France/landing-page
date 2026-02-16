@@ -2,6 +2,7 @@ import slugify from 'limax';
 
 import { SITE, APP_BLOG } from 'astrowind:config';
 
+import type { AppLang } from '~/i18n/routes';
 import { trim } from '~/utils/utils';
 
 export const trimSlash = (s: string) => trim(trim(s, '/'));
@@ -39,7 +40,7 @@ export const getCanonical = (path = ''): string | URL => {
 };
 
 /** */
-export const getPermalink = (slug = '', type = 'page'): string => {
+export const getPermalink = (slug = '', type = 'page', lang?: AppLang): string => {
   let permalink: string;
 
   if (
@@ -58,7 +59,7 @@ export const getPermalink = (slug = '', type = 'page'): string => {
       break;
 
     case 'blog':
-      permalink = getBlogPermalink();
+      permalink = createPath(lang ?? '', BLOG_BASE);
       break;
 
     case 'asset':
@@ -66,15 +67,15 @@ export const getPermalink = (slug = '', type = 'page'): string => {
       break;
 
     case 'category':
-      permalink = createPath(CATEGORY_BASE, trimSlash(slug));
+      permalink = createPath(lang ?? '', CATEGORY_BASE, trimSlash(slug));
       break;
 
     case 'tag':
-      permalink = createPath(TAG_BASE, trimSlash(slug));
+      permalink = createPath(lang ?? '', TAG_BASE, trimSlash(slug));
       break;
 
     case 'post':
-      permalink = createPath(trimSlash(slug));
+      permalink = createPath(lang ?? '', trimSlash(slug));
       break;
 
     case 'page':
@@ -90,7 +91,7 @@ export const getPermalink = (slug = '', type = 'page'): string => {
 export const getHomePermalink = (): string => getPermalink('/');
 
 /** */
-export const getBlogPermalink = (): string => getPermalink(BLOG_BASE);
+export const getBlogPermalink = (lang?: AppLang): string => getPermalink('', 'blog', lang);
 
 /** */
 export const getAsset = (path: string): string =>
