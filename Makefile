@@ -59,13 +59,13 @@ define run_linter
 		-e FILTER_REGEX_INCLUDE="$(filter-out $@,$(MAKECMDGOALS))" \
 		-e VALIDATE_TYPESCRIPT_PRETTIER=false \
 		-e VALIDATE_TYPESCRIPT_ES=false \
-        -e VALIDATE_CSS=false \
+		-e VALIDATE_CSS=false \
 		$(1) \
 		$$LINTER_IMAGE
 endef
 
 define docker-compose
-    COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.yml -f docker-compose.local.yml -f docker-compose.$(1).yml $(2)
+	COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose -f docker-compose.yml -f docker-compose.local.yml -f docker-compose.$(1).yml $(2)
 endef
 
 define open-in-browser

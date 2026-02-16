@@ -68,14 +68,26 @@ Key files:
 - `application/src/pages/[lang]/[page].astro` - localized dynamic pages
 - `application/src/i18n/routes.ts` - slug mapping and path translation helpers
 
-Translated static pages:
+## Translations
 
-- `about` → `/fr/a-propos` / `/en/about`
-- `contact` → `/fr/contact` / `/en/contact`
-- `sponsoring` → `/fr/sponsoring` / `/en/sponsoring`
-- `brand-guidelines` → `/fr/charte-graphique` / `/en/brand-guidelines`
-- `terms` → `/fr/conditions-generales-utilisation` / `/en/terms-of-service`
-- `privacy` → `/fr/politique-de-confidentialite` / `/en/privacy-policy`
+Translations are split by **domain** and **locale** (`en.ts`, `fr.ts`) using nested objects (no dot-string keys in data files).
+
+- Shared UI domains live in `application/src/data/`:
+  - `navigation/` (header + footer labels)
+  - `meta/`
+- Page-specific content/labels live in `application/src/data/pages/<page>/{en,fr}.ts` and should be consumed only by their related page(s) in `application/src/pages/`.
+
+Runtime behavior:
+
+- Supported languages and default locale are defined in `application/src/i18n/config.ts`.
+- Shared translation dictionaries are composed in `application/src/i18n/utils.ts` (`sourceLocales`).
+- `useTranslations(lang)` returns a locale object merged with fallback values from the default language (`fr`) when a value is missing or empty.
+
+When adding or changing translations:
+
+1. Put the value in the correct domain (or page file if page-local).
+2. Keep `navigation` as the single source of truth for shared navigation/footer labels.
+3. Keep `en` and `fr` structures aligned.
 
 ## Project structure
 

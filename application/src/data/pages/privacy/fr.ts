@@ -15,11 +15,11 @@ export default {
         "Compte : compte utilisateur permettant d'accéder au service.",
         'Entreprise : désigne Cloud Native Provence (ou "nous").',
         'Cookies : petits fichiers déposés sur votre appareil.',
-        "Appareil : tout outil permettant d'accéder au service (ordinateur, smartphone…).",
+        "Appareil : tout outil permettant d'accéder au service (ordinateur, smartphone...).",
         "Données personnelles : informations permettant d'identifier un individu.",
         'Service : désigne le site web Cloud Native Provence.',
         'Prestataire : toute entité traitant les données pour notre compte.',
-        "Données d'utilisation : données collectées automatiquement (ex. : temps de visite, IP…).",
+        "Données d'utilisation : données collectées automatiquement (ex. : temps de visite, IP...).",
       ],
     },
     {
@@ -34,7 +34,7 @@ export default {
         {
           title: "Données d'utilisation",
           paragraphs: [
-            "Les données d'utilisation sont collectées automatiquement lors de l'utilisation du service (adresse IP, type de navigateur, pages consultées…).",
+            "Les données d'utilisation sont collectées automatiquement lors de l'utilisation du service (adresse IP, type de navigateur, pages consultées...).",
           ],
         },
       ],

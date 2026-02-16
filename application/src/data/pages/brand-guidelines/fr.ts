@@ -1,6 +1,6 @@
 export const frContent = {
   metadata: {
-    title: 'Charte Graphique — Cloud Native Provence',
+    title: 'Charte Graphique - Cloud Native Provence',
   },
   hero: {
     tagline: 'Charte Graphique',

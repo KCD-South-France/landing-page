@@ -1,6 +1,6 @@
 export const enContent = {
   metadata: {
-    title: 'Brand Guidelines — Cloud Native Provence',
+    title: 'Brand Guidelines - Cloud Native Provence',
   },
   hero: {
     tagline: 'Brand Guidelines',

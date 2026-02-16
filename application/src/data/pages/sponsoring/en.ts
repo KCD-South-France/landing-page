@@ -2,7 +2,7 @@ import { getLocalizedPagePath } from '~/i18n/routes';
 
 export default {
   metadata: {
-    title: 'Sponsoring — Cloud Native Provence',
+    title: 'Sponsoring - Cloud Native Provence',
   },
   hero: {
     tagline: 'Sponsoring',

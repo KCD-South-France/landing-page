@@ -1,24 +1,26 @@
 ---
 import Layout from '~/layouts/Layout.astro';
-import { getLangFromUrl, useTranslations } from '~/i18n/utils';
+import { getLangFromUrl } from '~/i18n/utils';
+import notFoundEn from '~/data/pages/not-found/en';
+import notFoundFr from '~/data/pages/not-found/fr';
 
 const lang = getLangFromUrl(Astro.url);
-const t = useTranslations(lang);
+const t = lang === 'en' ? notFoundEn.notFound : notFoundFr.notFound;
 ---
 
-<Layout metadata={{ title: t('notFound.title') }}>
+<Layout metadata={{ title: t.title }}>
   <section class="flex items-center h-full p-16">
     <div class="container flex flex-col items-center justify-center px-5 mx-auto my-8">
       <div class="max-w-md text-center">
         <h2 class="mb-8 font-bold text-9xl">
-          <span class="sr-only">{t('notFound.error')}</span>
+          <span class="sr-only">{t.error}</span>
           <span class="text-primary">404</span>
         </h2>
-        <p class="text-3xl font-semibold md:text-3xl">{t('notFound.heading')}</p>
+        <p class="text-3xl font-semibold md:text-3xl">{t.heading}</p>
         <p class="mt-4 mb-8 text-lg text-muted dark:text-slate-400">
-          {t('notFound.message')}
+          {t.message}
         </p>
-        <a rel="noopener noreferrer" href={`/${lang}/`} class="btn ml-4">{t('notFound.backToHome')}</a>
+        <a rel="noopener noreferrer" href={`/${lang}/`} class="btn ml-4">{t.backToHome}</a>
       </div>
     </div>
   </section>

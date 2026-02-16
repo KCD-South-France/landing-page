@@ -1,4 +1,4 @@
-import { languages } from './ui';
+import { languages } from './config';
 
 export type AppLang = keyof typeof languages;
 

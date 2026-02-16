@@ -10,8 +10,8 @@ tags:
   - cloud-native
 ---
 
-Nous sommes heureux d’annoncer la création officielle de l’association **Cloud Native Provence**.
+Nous sommes heureux d'annoncer la création officielle de l'association **Cloud Native Provence**.
 
-Notre objectif est simple : rassembler la communauté locale, organiser des rencontres de qualité, et promouvoir la culture open source autour de Kubernetes et de l’écosystème cloud native.
+Notre objectif est simple : rassembler la communauté locale, organiser des rencontres de qualité, et promouvoir la culture open source autour de Kubernetes et de l'écosystème cloud native.
 
 Merci à toutes les personnes qui ont contribué à ce lancement. La suite arrive très vite.

@@ -1,17 +1,25 @@
 import { describe, expect, it } from 'vitest';
 
-import en from './locales/en';
-import fr from './locales/fr';
+import { sourceLocales } from './utils';
+
+const countLeaves = (value: unknown): number => {
+  if (typeof value !== 'object' || value === null) return 0;
+
+  return Object.values(value as Record<string, unknown>).reduce<number>((count, item) => {
+    if (typeof item === 'string') return count + 1;
+    return count + countLeaves(item);
+  }, 0);
+};
 
 describe('i18n locale dictionaries', () => {
   it('provides required navigation and metadata keys', () => {
-    expect(en['nav.about']).toBeTruthy();
-    expect(fr['nav.about']).toBeTruthy();
-    expect(en['meta.title.default']).toBeTruthy();
-    expect(fr['meta.title.default']).toBeTruthy();
+    expect(sourceLocales.en.nav.about).toBeTruthy();
+    expect(sourceLocales.fr.nav.about).toBeTruthy();
+    expect(sourceLocales.en.meta.title.default).toBeTruthy();
+    expect(sourceLocales.fr.meta.title.default).toBeTruthy();
   });
 
   it('contains consistent key count between locales', () => {
-    expect(Object.keys(en).length).toBe(Object.keys(fr).length);
+    expect(countLeaves(sourceLocales.en)).toBe(countLeaves(sourceLocales.fr));
   });
 });
