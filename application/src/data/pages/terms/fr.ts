@@ -11,10 +11,10 @@ export default {
     {
       title: 'Définitions',
       items: [
-        'Entreprise : désigne Cloud Native Provence (ou « nous »).',
+        'Entreprise : désigne Cloud Native Provence (ou "nous").',
         'Service : désigne le site web de Cloud Native Provence.',
         'Utilisateur : toute personne physique ou morale accédant au Service.',
-        "Appareil : tout outil permettant d'accéder au Service (ordinateur, tablette, téléphone…).",
+        "Appareil : tout outil permettant d'accéder au Service (ordinateur, tablette, téléphone...).",
       ],
     },
     {

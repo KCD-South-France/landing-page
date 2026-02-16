@@ -2,7 +2,7 @@ import { getLocalizedPagePath } from '~/i18n/routes';
 
 export default {
   metadata: {
-    title: 'Sponsoring — Cloud Native Provence',
+    title: 'Sponsoring - Cloud Native Provence',
   },
   hero: {
     tagline: 'Sponsoring',
@@ -129,7 +129,7 @@ export default {
       },
       {
         title: 'Est-ce que je peux cumuler plusieurs options ?',
-        description: "Oui, vous pouvez ajouter des options (badge, café, glaces…) à n'importe quel pack.",
+        description: "Oui, vous pouvez ajouter des options (badge, café, glaces...) à n'importe quel pack.",
       },
       {
         title: 'Est-ce que la facture est assujettie à la TVA ?',

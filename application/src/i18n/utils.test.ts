@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
-import { defaultLang, ui } from './ui';
-import { getLangFromUrl, useTranslations } from './utils';
+import { defaultLang } from './config';
+import { getLangFromUrl, sourceLocales, useTranslations } from './utils';
 
 describe('i18n utils', () => {
   it('detects language from URL pathname', () => {
@@ -18,19 +18,18 @@ describe('i18n utils', () => {
     const tFr = useTranslations('fr');
     const tEn = useTranslations('en');
 
-    expect(tFr('nav.about')).toBe(ui.fr['nav.about']);
-    expect(tEn('nav.about')).toBe(ui.en['nav.about']);
+    expect(tFr.nav.about).toBe(sourceLocales.fr.nav.about);
+    expect(tEn.nav.about).toBe(sourceLocales.en.nav.about);
   });
 
   it('falls back to default language key when selected language value is empty', () => {
-    const key = 'nav.about';
-    const originalValue = ui.en[key];
+    const originalValue = sourceLocales.en.nav.about;
 
-    (ui.en as Record<string, string>)[key] = '';
+    (sourceLocales.en as unknown as { nav: { about: string } }).nav.about = '';
     const t = useTranslations('en');
 
-    expect(t(key)).toBe(ui.fr[key]);
+    expect(t.nav.about).toBe(sourceLocales.fr.nav.about);
 
-    (ui.en as Record<string, string>)[key] = originalValue;
+    (sourceLocales.en as unknown as { nav: { about: string } }).nav.about = originalValue;
   });
 });

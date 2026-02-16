@@ -1,6 +1,6 @@
 ---
 import Layout from '~/layouts/PageLayout.astro';
-import { languages } from '~/i18n/ui';
+import { languages } from '~/i18n/config';
 import type { AppLang } from '~/i18n/routes';
 import homeEn from '~/data/pages/home/en';
 import homeFr from '~/data/pages/home/fr';
@@ -20,10 +20,10 @@ const t = lang === 'en' ? homeEn : homeFr;
   <Content
     hero={t.hero}
     note={t.note}
-    features={t.features}
-    contentSection={t.content}
-    steps={t.steps}
-    stats={t.stats}
+    about={t.about}
+    cfp={t.cfp}
+    venue={t.venue}
     callToAction={t.callToAction}
+    countdownLabels={t.countdownLabels}
   />
 </Layout>

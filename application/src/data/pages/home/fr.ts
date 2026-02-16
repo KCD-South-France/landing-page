@@ -2,124 +2,193 @@ import { getLocalizedPagePath } from '~/i18n/routes';
 
 export default {
   metadata: {
-    title: 'Cloud Native Provence — Cloud Native & Kubernetes à Aix-en-Provence',
+    title: 'KCD Provence 2026 - Kubernetes Community Days Provence à Aix-en-Provence',
+    description:
+      "Rejoignez 600+ professionnels du Cloud Native le 10 décembre 2026 au Palais des Congrès d'Aix-en-Provence pour une journée de conférences, workshops et networking.",
     ignoreTitleTemplate: true,
   },
   hero: {
     actions: [
       {
         variant: 'primary',
-        text: 'Je veux participer',
+        text: 'Billetterie',
         href: getLocalizedPagePath('fr', 'contact'),
         icon: 'tabler:calendar',
       },
-      { text: 'En savoir plus', href: '#features' },
+      { text: 'Proposer un talk', href: '#cfp' },
     ],
     image: { src: '~/assets/images/hero-image.png', alt: 'Image Cloud Native Provence' },
+    badge: '10 décembre 2026 · Aix-en-Provence',
     title: {
-      main: 'Cloud Native & Kubernetes',
-      date: '10 décembre 2026',
-      location: 'à Aix-en-Provence',
+      main: 'Kubernetes Community Days',
+      subtitle: 'Provence',
     },
     subtitle:
-      "Une journée d'échanges et de conférences autour de Kubernetes et des technologies Cloud Native, portée par la communauté.",
+      "Réservez la date ! Le 10 décembre 2026, la communauté Cloud Native se retrouve au Palais des Congrès d'Aix-en-Provence pour une journée de talks, de networking et de convivialité sous le soleil de Provence.",
     eventDate: '2026-12-10T09:00:00',
   },
   note: {
     title: 'Notre philosophie :',
     description: 'Communauté, Partage et Technologies Open Source',
   },
-  features: {
-    id: 'features',
-    tagline: 'Pourquoi venir ?',
-    title: "Cloud Native Provence en un clin d'œil",
-    subtitle:
-      'Un rendez-vous incontournable pour les passionnés du cloud, du DevOps, des conteneurs et des infrastructures modernes.',
-    items: [
-      {
-        title: 'Talks techniques',
-        description: 'Conférences de qualité sur Kubernetes, Cloud Native, DevOps, observabilité, sécurité et plus.',
-        icon: 'tabler:code',
-      },
-      {
-        title: 'Communauté locale',
-        description: "Un moment pour rencontrer, échanger et s'inspirer auprès de passionnés et professionnels.",
-        icon: 'tabler:users-group',
-      },
-      {
-        title: 'Opportunités de networking',
-        description: "Partenaires, recruteurs, experts : l'endroit idéal pour se connecter à l'écosystème tech.",
-        icon: 'tabler:network',
-      },
-      {
-        title: 'Accessibilité et inclusion',
-        description:
-          "Nous nous engageons à rendre l'événement accessible à tous, avec des initiatives pour la diversité.",
-        icon: 'tabler:accessible',
-      },
-    ],
+  countdownLabels: {
+    days: 'jours',
+    hours: 'heures',
+    minutes: 'minutes',
+    seconds: 'secondes',
   },
-  content: {
-    isReversed: true,
-    tagline: 'CFP',
-    title: 'Appel à conférenciers',
-    items: [
-      {
-        title: 'Prochainement disponible',
-        description: "L'appel à conférenciers ouvrira bientôt. Préparez vos propositions de talks !",
-      },
-      {
-        title: 'Thématiques',
-        description: 'Kubernetes, Cloud Native, DevOps, observabilité, sécurité, et bien plus encore.',
-      },
-      {
-        title: 'Formats variés',
-        description: "Conférences, ateliers, retours d'expérience - tous les formats sont les bienvenus.",
-      },
+  about: {
+    id: 'about',
+    title: "L'événement",
+    intro:
+      "KCD Provence est une conférence communautaire qui rassemble développeurs, plateform engineers et professionnels IT passionnés par les technologies Cloud Native. Organisé par l'association Cloud Native Provence, cet événement s'inscrit dans le réseau mondial des Kubernetes Community Days soutenu par la CNCF.",
+    paragraph2:
+      "Pendant une journée, vous profiterez de talks inspirants donnés par des experts, d'ateliers pratiques pour approfondir vos compétences, d'un espace exposition pour découvrir les acteurs de l'écosystème, et de nombreux moments d'échange dans un cadre exceptionnel.",
+    stats: [
+      { amount: '600+', title: 'Participants attendus' },
+      { amount: '1', title: 'Journée de talks & workshops' },
+      { amount: '∞', title: 'Opportunités de networking' },
     ],
+    whatToExpect: {
+      title: 'Au programme',
+      items: [
+        {
+          title: 'Conférences',
+          description:
+            "Des talks de 10 à 30 minutes par des speakers nationaux et internationaux, du retour d'expérience au deep-dive technique.",
+          icon: 'tabler:microphone',
+        },
+        {
+          title: 'Networking',
+          description:
+            'Pauses café, déjeuner inclus et afterparty pour créer des connexions durables avec la communauté.',
+          icon: 'tabler:users-group',
+        },
+        {
+          title: 'Expo Sponsors',
+          description:
+            'Un espace dédié aux entreprises partenaires pour échanger, découvrir des outils et repartir avec du swag.',
+          icon: 'tabler:building',
+        },
+      ],
+    },
+    values: {
+      title: 'Nos valeurs',
+      items: [
+        {
+          title: 'Collaboration',
+          description: 'Le partage des connaissances est au cœur de notre communauté.',
+          icon: 'tabler:heart-handshake',
+        },
+        {
+          title: 'Accessibilité',
+          description: "Des contenus pour tous les niveaux, du débutant à l'expert.",
+          icon: 'tabler:accessible',
+        },
+        {
+          title: 'Diversité & Inclusion',
+          description: 'Un événement ouvert à toutes et tous, dans le respect du Code de Conduite CNCF.',
+          icon: 'tabler:users',
+        },
+      ],
+    },
+  },
+  cfp: {
+    id: 'cfp',
+    title: 'Appel à conférenciers',
+    intro:
+      "C'est le moment de devenir speaker au KCD Provence ! Envoyez-nous vos propositions de talks et partagez votre expertise avec la communauté Cloud Native.",
+    status: 'Bientôt ouvert',
+    importantDates: {
+      title: 'Dates importantes',
+      items: [
+        { label: 'Ouverture du CFP', date: 'TBD' },
+        { label: 'Clôture du CFP', date: 'TBD' },
+        { label: 'Notification des speakers', date: 'TBD' },
+        { label: 'Jour J', date: '10 décembre 2026' },
+      ],
+    },
+    tracks: {
+      title: 'Thématiques',
+      list: [
+        'Kubernetes & Conteneurs',
+        'Platform Engineering',
+        'Observabilité & Monitoring',
+        'Sécurité',
+        'IA/ML & Cloud Native',
+        'Developer Experience',
+        'Cloud Native 101',
+        'Sustainability & FinOps',
+      ],
+    },
+    formats: {
+      title: 'Formats acceptés',
+      items: [
+        {
+          title: 'Lightning Talk (15 min)',
+          description: 'Présentation éclair sur une thématique technique.',
+        },
+        {
+          title: 'Talk (30 min)',
+          description: "Présentation classique, retour d'expérience ou deep-dive technique.",
+        },
+      ],
+    },
+    speakerPerks: {
+      title: 'Avantages speakers',
+      items: [
+        "Pass speaker gratuit pour l'événement",
+        "Dîner des speakers la veille de l'événement",
+        'Enregistrement vidéo de votre talk',
+      ],
+    },
+    guidelines: {
+      title: 'Quelques règles',
+      items: [
+        'Les talks peuvent être en français ou en anglais',
+        "Pas de pitch commercial, nous voulons du contenu authentique et du retour d'expérience",
+        'Maximum 2 soumissions par speaker',
+        'Les propositions ne seront plus modifiables après soumission',
+      ],
+    },
+    cta: 'Soumettre via Conference HALL',
     image: {
       src: '~/assets/images/event.jpg',
       alt: 'Appel à conférenciers',
     },
-    contentTitle: 'Partagez votre expertise',
-    contentDescription: "L'appel à conférenciers arrive bientôt. Restez à l'écoute !",
   },
-  steps: {
-    title: 'Comment participer à Cloud Native Provence ?',
-    items: [
-      {
-        title: 'Étape 1 : <span class="font-medium">Réservez votre billet</span>',
-        description: "L'inscription est bientôt disponible. Restez à l'écoute !",
-        icon: 'tabler:ticket',
-      },
-      {
-        title: 'Étape 2 : <span class="font-medium">Proposez un talk</span>',
-        description: 'Vous avez un sujet passionnant ? Répondez à notre appel à conférenciers.',
-        icon: 'tabler:microphone',
-      },
-      {
-        title: 'Étape 3 : <span class="font-medium">Devenez sponsor</span>',
-        description: "Valorisez votre marque auprès d'une audience qualifiée et engagée.",
-        icon: 'tabler:building',
-      },
-      {
-        title: 'Étape 4 : <span class="font-medium">Venez !</span>',
-        description: 'Rejoignez-nous le 10 décembre 2026 à Aix-en-Provence. On vous attend !',
-        icon: 'tabler:check',
-      },
-    ],
-    image: {
-      src: 'https://images.unsplash.com/photo-1616198814651-e71f960c3180?ixlib=rb-4.0.3&auto=format&fit=crop&w=987&q=80',
-      alt: 'Étapes',
+
+  venue: {
+    title: 'Le lieu',
+    venueName: 'Palais des Congrès, Aix-en-Provence',
+    description:
+      "Le KCD Provence se tiendra au Palais des Congrès d'Aix-en-Provence. Vous profiterez de salles de conférence modernes, d'un espace exposition pour les sponsors, et de nombreuses zones de networking. Café et restauration seront disponibles tout au long de la journée, et un afterparty vous attend en fin de journée !",
+    howToGetThere: {
+      title: 'Comment venir',
+      items: [
+        {
+          title: 'En voiture',
+          description:
+            "Parking à proximité. Aix-en-Provence est accessible par l'autoroute A8 (sortie Aix-en-Provence).",
+          icon: 'tabler:car',
+        },
+        {
+          title: 'En train',
+          description:
+            'Gare Aix-en-Provence TGV à ~15 min en navette. Connexions directes depuis Paris (3h), Lyon (1h30), Marseille (15 min).',
+          icon: 'tabler:train',
+        },
+        {
+          title: 'En avion',
+          description: 'Aéroport Marseille Provence (MRS) à ~30 min. Navettes et taxis disponibles.',
+          icon: 'tabler:plane',
+        },
+      ],
     },
-  },
-  stats: {
-    stats: [
-      { title: 'Participants attendus', amount: '450' },
-      { title: 'Speakers', amount: '24' },
-      { title: 'Talks', amount: '16' },
-      { title: 'Bénévoles', amount: '20' },
-    ],
+    accommodation: {
+      title: 'Hébergements',
+      text: "Aix-en-Provence offre un large choix d'hôtels et d'hébergements. Une liste de recommandations sera publiée prochainement.",
+    },
   },
   callToAction: {
     actions: [
